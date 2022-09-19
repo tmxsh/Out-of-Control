@@ -76,4 +76,13 @@ function render(deck)
         document.getElementById("deck").appendChild(card);
     }
 }
-console.log("test");
+
+function load()
+{
+    deck = getDeck();
+    shuffle();
+    render();
+
+}
+
+window.onload = load;
