@@ -6,7 +6,7 @@ var names = ["Rift", "Exotic Matter", "Deflector", "Anomoly",
 "Antimatter", "Time Stop", "Nova"];
 
 //different ranks for the cards - goes 1 through 10
-var ranks = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+var ranks = [1, 2, 3, 4, 4, 5,  5,6, 6, 7, 8, 9, 10]
 
 var deck1 = new Array();
 var hand1 = new Array();
@@ -77,7 +77,7 @@ function render(passedDeck, deckId)
 		rank.className = "rank";
 		type.className = "type" + passedDeck[i].Type;
 
-		rank.innerHTML = passedDeck[i].Name;
+		rank.innerHTML = passedDeck[i].Name + " (" + passedDeck[i].Rank + ")";
 		card.appendChild(rank);
 		card.appendChild(type);
 
