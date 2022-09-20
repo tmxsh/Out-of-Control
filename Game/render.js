@@ -65,6 +65,21 @@ function shuffle1(deck1)
     render1();
 }
 
+function shuffle(name)
+{
+    for(let i = 0; i < 1000; i++)
+    {
+        let location1 = Math.floor(Math.random() * name.length);
+        let location2 = Math.floor(Math.random() * name.length);
+
+        let temp = name[location1];
+
+        name[location1] = name[location2]
+        name[location2] = temp;
+    }
+
+    render1();
+}
 function shuffle2(deck2)
 {
     for(let i = 0; i < 1000; i++)
@@ -123,15 +138,7 @@ function render2()
 	}
 }
 
-function draw1()
-{
-    return deck.pop();
-}
 
-function draw2()
-{
-    return deck2.pop();
-}
 
 function renderHand1()
 {
