@@ -1,58 +1,85 @@
-.deck .card
+.deck1
 {
-    border: solid 1px #aaa;
-    border-radius: 9px;
-    width: 95px;
-    height: 150px;
-    float:left;
-    background-color: white;
-    padding: 3px 3px 3px 3px;
-    margin: 5px;
+	width:50%;
+	margin: 20px auto;
+	background:dodgerblue;
+	border:solid 10px black;
+	padding: 10px;
+	border-radius:10px;
+	text-align: center;
+	color:white;
+
+	display: inline-block;
 }
 
-.card2
+.header
 {
-    width: 50px;
-    padding: 10px;
-    border: solid 1px #808080;
-    background-color: white;
-    display: inline-block;
-    border-radius: 10px;
-    font-size: 22px;
-    text-align: center;
-    margin: 3px;
-    border:solid 3px;
+	margin:auto;
+	background: violet;
+	text-align:center;
+}
+.hand1
+{
+	width:25%;
+	margin: 20px auto;
+	background:dodgerblue;
+	border:solid 10px black;
+	padding: 10px;
+	border-radius:10px;
+	text-align: center;
+	color:white;
+
+	display: inline-block;
 }
 
-.card .value{
-    font-size:15pt;
-    font-family: sans-serif;
+.deck2
+{
+	width:50%;
+	margin: 20px auto;
+	background:dodgerblue;
+	border:solid 10px black;
+	padding: 10px;
+	border-radius:10px;
+	text-align: center;
+	color:white;
+
+	display: inline-block;
 }
 
-.card .name
+.hand2
 {
-	background-image: url('https://www.thatsoftwaredude.com/images/post/0f631eeb-6c4a-4bfd-9f86-e0a08ae8584b.png');
-	height: 100px;
-	width: 90px;
+	width:25%;
+	margin: 20px auto;
+	background:dodgerblue;
+	border:solid 10px black;
+	padding: 10px;
+	border-radius:10px;
+	text-align: center;
+	color:white;
+
+	display: inline-block;
 }
 
-.card 
+
+.card
 {
-    back-ground-position-y: 100px;
+	padding: 10px;
+	border: solid 1px #808080;
+	background-color: white;
+	display: inline-block;
+	border-radius: 10px;
+	font-size: 14pt;
+	text-align: center;
+	color:black;
+	margin: 3px;
 }
 
-.card .diamonds
-{
-	background-position-y: 100px;
-}
 
-.card .hearts
+.btn
 {
-	background-position-x: 90px;
-}
-
-.card .clubs
-{
-	background-position-x:90px;
-	background-position-y:100px;
+	background:white;
+	padding: 10px 20px;
+	border-radius:30px;
+	margin: 10px;
+	display:inline-block;
 }

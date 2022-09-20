@@ -162,3 +162,4 @@ class Nova extends Card
 	}
 }
 
+console.log("test");
