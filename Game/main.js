@@ -68,7 +68,6 @@ function shuffle(passedDeck, deckId)
 function render(passedDeck, deckId)
 {
     document.getElementById(deckId).innerHTML = '';
-    //console.log(deck.length);
 	for(var i = 0; i < passedDeck.length; i++)
 	{
 		var card = document.createElement("div");
@@ -95,29 +94,6 @@ function draw(passedDeck, passedHand, deckName, handName)
     render(passedDeck, deckName);
 }
 
-/**
-function renderHand(passedDeck, deckName)
-{
-    document.getElementById(deckName).innerHTML = '';
-    //console.log(deck.length);
-	for(var i = 0; i < passedDeck.length; i++)
-	{
-		var card = document.createElement("div");
-		var rank = document.createElement("div");
-		var type = document.createElement("div");
-		card.className = "card";
-		rank.className = "rank";
-		type.className = "type" + passedDeck[i].Type;
-
-		rank.innerHTML = passedDeck[i].Name;
-		card.appendChild(rank);
-		card.appendChild(type);
-
-		document.getElementById(deckName).appendChild(card);
-	}
-}
-*/
-
 function load()
 {
     deck = createDeck();
@@ -126,9 +102,6 @@ function load()
     shuffle(deck2, 'deck2');
     render(deck, 'deck1');
     render(deck2, 'deck2');
-
-    //draw(deck2);
-
 }
 
 window.onload = load;
