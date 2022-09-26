@@ -1,6 +1,6 @@
 <?php
 $servername = "localhost";
-$username = "tmxshio_WPBTT ";
+$username = "tmxshio_connect";
 $password = "seahorse?1B";
 $dbname = "tmxshio_WPBTT";
 

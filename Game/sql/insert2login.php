@@ -7,7 +7,7 @@
 	$username   = $_GET["Username"];
 	$password = $_GET["Password"];
 
-	$sql = "INSERT INTO login values ('".$username."',".$password.")";
+	$sql = "INSERT INTO login values ('".$username."','".$password."')";
 
 	if ($mysqli_conn->query($sql) === TRUE) {
     		echo "New login created successfully";
