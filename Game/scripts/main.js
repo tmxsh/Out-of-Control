@@ -94,6 +94,16 @@ function draw(passedDeck, passedHand, deckName, handName)
     render(passedDeck, deckName);
 }
 
+function getScore(passedHand)
+{
+    var score = 0;
+    for(var i = 0; i < passedHand.length; i++)
+    {
+        score += passedHand[i].rank;
+    }
+    return score;
+}
+
 function load()
 {
     deck = createDeck();
