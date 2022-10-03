@@ -92,16 +92,20 @@ function draw(passedDeck, passedHand, deckName, handName)
     //renderHand(hand, handName);
     render(passedHand, handName);
     render(passedDeck, deckName);
+
+    getScore(passedHand, "score1");
 }
 
-function getScore(passedHand)
+function getScore(passedHand, passedID)
 {
+    //document.getElementById(passedID)
     var score = 0;
     for(var i = 0; i < passedHand.length; i++)
     {
-        score += passedHand[i].rank;
+        score = score + passedHand[i].Rank;
+        console.log(hand1[i].Rank);
     }
-    return score;
+    document.getElementById(passedID).innerHTML = score.toString();
 }
 
 function load()
@@ -112,6 +116,11 @@ function load()
     shuffle(deck2, 'deck2');
     render(deck, 'deck1');
     render(deck2, 'deck2');
+    //console.log(deck[0].type);
+    let x = deck[0];
+    console.log(x.Rank);
 }
 
+
+//const myInterval = setInterval(getScore(hand1, 'score1'), 1000);
 window.onload = load;
