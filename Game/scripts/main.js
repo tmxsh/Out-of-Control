@@ -14,6 +14,8 @@ var hand1 = new Array();
 var deck2 = new Array();
 var hand2 = new Array();
 
+var board = new Array();
+
 var hand1Count = 0;
 var hand2Count = 0;
 
@@ -96,7 +98,7 @@ function draw(passedDeck, passedHand, deckName, handName)
     //renderHand(hand, handName);
     render(passedHand, handName);
 
-    getScore(passedHand, "score");
+    getScore(board, "score");
 }
 
 function getScore(passedHand, passedID)
@@ -120,8 +122,8 @@ function load()
     //render(deck, 'deck1');
     //render(deck2, 'deck2');
     //console.log(deck[0].type);
-    let x = deck[0];
-    console.log(x.Rank);
+    //let x = deck[0];
+    //console.log(x.Rank);
 }
 
 

@@ -15,8 +15,15 @@
     
     function drop(ev) {
       ev.preventDefault();
-      var data = ev.dataTransfer.getData("text");
-      ev.target.appendChild(document.getElementById(data));
+      //var data = ev.dataTransfer.getData("text");
+      //ev.target.appendChild(document.getElementById(data));
+
+      board[board.length] = hand1.pop();
+
+      render(board, 'board');
+      render(hand1, 'hand1');
+      getScore(board, "score");
+
     }
 </script>
 
@@ -28,6 +35,7 @@
         <div class="hd">
             <a href="../index.html"> Homepage </a> 
         </div>
+
         <div class="login">
             <a href="../login/login.html"> Click here to log in</a>
         </div>
@@ -35,6 +43,7 @@
 
         <div class="board" ondrop="drop(event)" ondragover="allowDrop(event)">
             <h1> Your Board </h1>
+            <div id="board"></div>
         </div>
 
         <div class="score">
