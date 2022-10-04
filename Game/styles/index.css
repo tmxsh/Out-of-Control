@@ -1,0 +1,10 @@
+*{
+    background-color: moccasin;
+}
+
+.header, .login, .create, .play
+{
+	margin:auto;
+	background: violet;
+	text-align:center;
+}
