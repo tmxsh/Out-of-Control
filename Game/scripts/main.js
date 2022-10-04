@@ -108,7 +108,7 @@ function getScore(passedHand, passedID)
     for(var i = 0; i < passedHand.length; i++)
     {
         score = score + passedHand[i].Rank;
-        console.log(hand1[i].Rank);
+        //console.log(hand1[i].Rank);
     }
     document.getElementById(passedID).innerHTML = score.toString();
 }
