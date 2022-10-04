@@ -8,16 +8,16 @@ var names = ["Rift", "Exotic Matter", "Deflector", "Anomoly",
 //different ranks for the cards - goes 1 through 10
 var ranks = [1, 2, 3, 4, 4, 5,  5,6, 6, 7, 8, 9, 10]
 
+//deck for player one, hand for player 1
 var deck1 = new Array();
 var hand1 = new Array();
 
+//deck for player two, hand for player 2
 var deck2 = new Array();
 var hand2 = new Array();
 
+//this board is where cards go when they get played 
 var board = new Array();
-
-var hand1Count = 0;
-var hand2Count = 0;
 
 function createDeck()
 {
@@ -55,16 +55,16 @@ function shuffle(passedDeck, deckId)
 {
     for(let i = 0; i < 1000; i++)
     {
+        //generate some seeds to randomize
         let location1 = Math.floor(Math.random() * passedDeck.length);
         let location2 = Math.floor(Math.random() * passedDeck.length);
 
+        //just a temp deck to swap the position
         let temp = passedDeck[location1];
 
         passedDeck[location1] = passedDeck[location2]
         passedDeck[location2] = temp;
     }
-
-    //render(passedDeck, deckId);
 }
 
 function render(passedDeck, deckId)
@@ -103,29 +103,47 @@ function draw(passedDeck, passedHand, deckName, handName)
 
 function getScore(passedHand, passedID)
 {
-    //document.getElementById(passedID)
+    //initialized score - starts at 0, for obvious reasons
     var score = 0;
+
     for(var i = 0; i < passedHand.length; i++)
     {
+        //walk through the board(I originally thought it was the hand where the score came from)
         score = score + passedHand[i].Rank;
-        //console.log(hand1[i].Rank);
+        //update score
     }
+    //append the score to the HTML
     document.getElementById(passedID).innerHTML = score.toString();
+}
+
+function findCard(passedDeck, name, rank, type)
+{
+    for(var i = 0; i < passedDeck.length; i++)
+    {
+        console.log(i)
+        console.log("rank is + " + rank);
+        if(passedDeck[i].Rank == rank)
+        {
+            console.log("found!");
+        }
+    }
 }
 
 function load()
 {
     deck = createDeck();
     deck2 = createDeck();
-    shuffle(deck, 'deck1');
+    shuffle(deck1, 'deck1');
     //shuffle(deck2, 'deck2');
     //render(deck, 'deck1');
     //render(deck2, 'deck2');
     //console.log(deck[0].type);
     //let x = deck[0];
     //console.log(x.Rank);
+    findCard(deck, "Rift", 5, "stable");
 }
 
 
 //const myInterval = setInterval(getScore(hand1, 'score1'), 1000);
 window.onload = load;
+

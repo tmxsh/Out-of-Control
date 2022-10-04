@@ -9,19 +9,18 @@
       ev.preventDefault();
     }
     
-    function drag(ev) {
-      ev.dataTransfer.setData("text", ev.target.id);
-    }
-    
     function drop(ev) {
+      //stops the default behavior  
       ev.preventDefault();
-      //var data = ev.dataTransfer.getData("text");
-      //ev.target.appendChild(document.getElementById(data));
 
+      //pop the card from the hand to the board var in main.js
       board[board.length] = hand1.pop();
 
+      //render the board
       render(board, 'board');
+      //render the hand
       render(hand1, 'hand1');
+      //update the score
       getScore(board, "score");
 
     }
