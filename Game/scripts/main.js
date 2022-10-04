@@ -91,9 +91,8 @@ function draw(passedDeck, passedHand, deckName, handName)
     passedHand[passedHand.length] = passedDeck.pop();
     //renderHand(hand, handName);
     render(passedHand, handName);
-    render(passedDeck, deckName);
 
-    getScore(passedHand, "score1");
+    getScore(passedHand, "score");
 }
 
 function getScore(passedHand, passedID)
