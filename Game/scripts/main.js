@@ -62,7 +62,7 @@ function shuffle(passedDeck, deckId)
         passedDeck[location2] = temp;
     }
 
-    render(passedDeck, deckId);
+    //render(passedDeck, deckId);
 }
 
 function render(passedDeck, deckId)
@@ -81,7 +81,11 @@ function render(passedDeck, deckId)
 		card.appendChild(rank);
 		card.appendChild(type);
 
-		document.getElementById(deckId).appendChild(card);
+        var s = rank.toString + type.toString;
+        card.setAttribute("id", s);
+        card.setAttribute("draggable", "true");
+        card.setAttribute("ondragstart", "drag(event)");
+        document.getElementById(deckId).appendChild(card);
 	}
 }
 
@@ -112,9 +116,9 @@ function load()
     deck = createDeck();
     deck2 = createDeck();
     shuffle(deck, 'deck1');
-    shuffle(deck2, 'deck2');
-    render(deck, 'deck1');
-    render(deck2, 'deck2');
+    //shuffle(deck2, 'deck2');
+    //render(deck, 'deck1');
+    //render(deck2, 'deck2');
     //console.log(deck[0].type);
     let x = deck[0];
     console.log(x.Rank);

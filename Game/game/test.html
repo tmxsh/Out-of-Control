@@ -3,6 +3,23 @@
     <link rel="stylesheet" href="../styles/game.css">
     <script type="text/javascript" src="../scripts/main.js" defer></script>
 </head>
+
+<script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+    
+    function drag(ev) {
+      ev.dataTransfer.setData("text", ev.target.id);
+    }
+    
+    function drop(ev) {
+      ev.preventDefault();
+      var data = ev.dataTransfer.getData("text");
+      ev.target.appendChild(document.getElementById(data));
+    }
+</script>
+
 <div class = "header">
     <h1> Welcome to Out of Control!</h1>
 </div>
@@ -16,7 +33,7 @@
         </div>
 
 
-        <div class="board">
+        <div class="board" ondrop="drop(event)" ondragover="allowDrop(event)">
             <h1> Your Board </h1>
         </div>
 
