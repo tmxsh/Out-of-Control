@@ -73,8 +73,16 @@ function render(passedDeck, deckId)
 	for(var i = 0; i < passedDeck.length; i++)
 	{
 		var card = document.createElement("div");
+
+        //document.body.appendChild(card);
+
 		var rank = document.createElement("div");
 		var type = document.createElement("div");
+
+        var select = document.createElement("select");
+        document.body.appendChild(card);
+
+
 		card.className = "card";
 		rank.className = "rank";
 		type.className = "type" + passedDeck[i].Type;
@@ -82,11 +90,54 @@ function render(passedDeck, deckId)
 		rank.innerHTML = passedDeck[i].Name + " (" + passedDeck[i].Rank + ")";
 		card.appendChild(rank);
 		card.appendChild(type);
+        card.appendChild(select);
 
         var s = rank.toString + type.toString;
         card.setAttribute("id", s);
         card.setAttribute("draggable", "true");
         card.setAttribute("ondragstart", "drag(event)");
+        
+        card.setAttribute("data-name", passedDeck[i].Name);
+        card.setAttribute("data-rank", passedDeck[i].Rank);
+        card.setAttribute("data-type", passedDeck[i].Type);
+        //card.setAttribute("onclick", "console.log(true)");
+
+        var option1 = document.createElement("option");
+        //option1.setAttribute("value", playCard(passedDeck[i].Name, passedDeck[i].Rank, passedDeck[i].Type));
+        
+        //,card.getAttribute("data-rank"), card.getAttribute("data-type")))");
+
+        //option1.setAttribute("onclick", "playcard")
+
+        var option2 = document.createElement("option");
+        option2.setAttribute("value", "Discard");
+
+        var option3 = document.createElement("option");
+        option3.setAttribute("value", "Discharge");
+
+        var textNode = document.createTextNode("Play");
+        option1.appendChild(textNode);
+
+        textNode = document.createTextNode("Discard");
+
+        option2.appendChild(textNode);
+
+        textNode = document.createTextNode("Discharge");
+
+        option3.appendChild(textNode);
+
+        select.appendChild(option1);
+        select.appendChild(option2);
+        select.appendChild(option3);
+
+        /** 
+        console.log(card.getAttribute("data-name"));
+        console.log(card.getAttribute("data-rank"));
+        console.log(card.getAttribute("data-type"));
+
+        */
+
+        //card.setAttribute("ondragend", )
         document.getElementById(deckId).appendChild(card);
 	}
 }
@@ -116,31 +167,41 @@ function getScore(passedHand, passedID)
     document.getElementById(passedID).innerHTML = score.toString();
 }
 
-function findCard(passedDeck, name, rank, type)
+function findCard(passedDeck, name, rank, type, newDeck)
 {
     for(var i = 0; i < passedDeck.length; i++)
     {
-        console.log(i)
-        console.log("rank is + " + rank);
-        if(passedDeck[i].Rank == rank)
+        //console.log(i)
+        //console.log("rank is + " + rank);
+        if(passedDeck[i].Rank == rank && passedDeck[i].Name == name && passedDeck[i].Type == type)
         {
-            console.log("found!");
+            newDeck[newDeck.length] = passedDeck.splice(i,i);
+            /**
+            render(newDeck, 'board');
+            render(passedDeck, 'hand1');
+            */
         }
     }
+}
+
+function playCard(name, rank, type)
+{
+    console.log("playing card");
+    findCard(hand1, name, rank, type, board);
 }
 
 function load()
 {
     deck = createDeck();
     deck2 = createDeck();
-    shuffle(deck1, 'deck1');
+    shuffle(deck, 'deck1');
     //shuffle(deck2, 'deck2');
     //render(deck, 'deck1');
     //render(deck2, 'deck2');
     //console.log(deck[0].type);
     //let x = deck[0];
     //console.log(x.Rank);
-    findCard(deck, "Rift", 5, "stable");
+    //findCard(deck, "Rewind", 5, "unstable");
 }
 
 
