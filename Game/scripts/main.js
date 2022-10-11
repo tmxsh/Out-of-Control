@@ -67,11 +67,22 @@ function shuffle(passedDeck, deckId)
     }
 }
 
+function selectOption(value, name, rank, type)
+{
+    console.log("hehe");
+    if(value == "0")
+    {
+        console.log("hoho");
+        playCard(name, rank, type);
+    }
+}
 function render(passedDeck, deckId)
 {
+    //console.log(document.getElementById(deckId));
     document.getElementById(deckId).innerHTML = '';
 	for(var i = 0; i < passedDeck.length; i++)
 	{
+        //console.log(passedDeck.keys({passedDeck})[0]);
         //creates HTML elements for the card, its rank, and its type
 		var card = document.createElement("div");
 		var rank = document.createElement("div");
@@ -79,6 +90,10 @@ function render(passedDeck, deckId)
 
         //creates the select option on the cards 
         var select = document.createElement("select");
+        var s = "selectOption(this.value," + "'" + passedDeck[i].Name + "'" + "," + passedDeck[i].Rank + "," + "'" + passedDeck[i].Type + "'" + ")";
+
+        console.log(s);
+        select.setAttribute("onchange", s);
         //creates a body for us to put the options for the select button
         document.body.appendChild(select);
 
@@ -89,13 +104,12 @@ function render(passedDeck, deckId)
 
 
         //sets rank based on the rank of the card
-		rank.innerHTML = passedDeck[i].Name + " (" + passedDeck[i].Rank + ")";
+		rank.innerHTML = passedDeck[i].Name + " (" + passedDeck[i].Rank + ")" + "( " + passedDeck[i].Type + ")";
 
         //appends the rank type and select button to the card element
 		card.appendChild(rank);
 		card.appendChild(type);
         card.appendChild(select);
-
         //used to set the id
         var s = rank.toString + type.toString;
 
@@ -113,23 +127,28 @@ function render(passedDeck, deckId)
         card.setAttribute("data-type", passedDeck[i].Type);
 
         //create option to play
+
+        var blank = document.createElement("option");
+        blank.setAttribute("value", "Select a move");
+        blank.setAttribute("selected", "selected");
+
         var option1 = document.createElement("option");
-        //option1.setAttribute("value", playCard(passedDeck[i].Name, passedDeck[i].Rank, passedDeck[i].Type));
-        
-        //,card.getAttribute("data-rank"), card.getAttribute("data-type")))");
-
-        //option1.setAttribute("onclick", "playcard")
-
+        option1.setAttribute("value", "0");
+        //option1.setAttribute("onclick", playCard(passedDeck[i].Name, passedDeck[i].Rank, passedDeck[i].Type));
+    
         //option to discard
         var option2 = document.createElement("option");
-        option2.setAttribute("value", "Discard");
+        option2.setAttribute("value", "1");
+
 
         //option to discharge
         var option3 = document.createElement("option");
-        option3.setAttribute("value", "Discharge");
+        option3.setAttribute("value", "2");
 
+        var textNode = document.createTextNode("Select an Option");
+        blank.appendChild(textNode);
         //setting the text on the select box
-        var textNode = document.createTextNode("Play");
+        textNode = document.createTextNode("Play");
         option1.appendChild(textNode);
 
         //setting the text on the select box
@@ -141,12 +160,14 @@ function render(passedDeck, deckId)
         option3.appendChild(textNode);
 
         //appending the different options to our select box so one can be chosen
+        select.appendChild(blank);
         select.appendChild(option1);
         select.appendChild(option2);
         select.appendChild(option3);
 
         //appends the created card to the correct deckID
         document.getElementById(deckId).appendChild(card);
+        getScore(board, "score");
 	}
 }
 
@@ -157,7 +178,7 @@ function draw(passedDeck, passedHand, deckName, handName)
     //renderHand(hand, handName);
     render(passedHand, handName);
 
-    getScore(board, "score");
+    
 }
 
 function getScore(passedHand, passedID)
@@ -179,9 +200,24 @@ function findCard(passedDeck, name, rank, type, newDeck)
 {
     for(var i = 0; i < passedDeck.length; i++)
     {
+        /**
+        console.log("name is " + name);
+        console.log("rank is " + rank);
+        console.log("type is " + type);
+        console.log(passedDeck[i]);
+        */
+
         if(passedDeck[i].Rank == rank && passedDeck[i].Name == name && passedDeck[i].Type == type)
         {
-            newDeck[newDeck.length] = passedDeck.splice(i,i);
+            newDeck[newDeck.length] = passedDeck[i];
+            passedDeck.splice(i, 1);
+            //console.log(newDeck[newDeck.length - 1]);
+            //
+            return;
+        }
+        else
+        {
+            console.log("failed to find card");
         }
     }
 }
@@ -190,6 +226,8 @@ function playCard(name, rank, type)
 {
     console.log("playing card");
     findCard(hand1, name, rank, type, board);
+    render(board, 'board');
+    render(hand1, 'hand1');
 }
 
 function load()
