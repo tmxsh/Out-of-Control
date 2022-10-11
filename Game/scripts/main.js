@@ -72,36 +72,47 @@ function render(passedDeck, deckId)
     document.getElementById(deckId).innerHTML = '';
 	for(var i = 0; i < passedDeck.length; i++)
 	{
+        //creates HTML elements for the card, its rank, and its type
 		var card = document.createElement("div");
-
-        //document.body.appendChild(card);
-
 		var rank = document.createElement("div");
 		var type = document.createElement("div");
 
+        //creates the select option on the cards 
         var select = document.createElement("select");
-        document.body.appendChild(card);
+        //creates a body for us to put the options for the select button
+        document.body.appendChild(select);
 
-
+        //sets the classname for the formerly created HTML divs
 		card.className = "card";
 		rank.className = "rank";
 		type.className = "type" + passedDeck[i].Type;
 
+
+        //sets rank based on the rank of the card
 		rank.innerHTML = passedDeck[i].Name + " (" + passedDeck[i].Rank + ")";
+
+        //appends the rank type and select button to the card element
 		card.appendChild(rank);
 		card.appendChild(type);
         card.appendChild(select);
 
+        //used to set the id
         var s = rank.toString + type.toString;
+
+        //set the id of the card
         card.setAttribute("id", s);
+
+        //make it dragable and set the event - this may be removed from production
         card.setAttribute("draggable", "true");
         card.setAttribute("ondragstart", "drag(event)");
-        
+
+
+        //set attribute names for the html so they can be retrieved
         card.setAttribute("data-name", passedDeck[i].Name);
         card.setAttribute("data-rank", passedDeck[i].Rank);
         card.setAttribute("data-type", passedDeck[i].Type);
-        //card.setAttribute("onclick", "console.log(true)");
 
+        //create option to play
         var option1 = document.createElement("option");
         //option1.setAttribute("value", playCard(passedDeck[i].Name, passedDeck[i].Rank, passedDeck[i].Type));
         
@@ -109,35 +120,32 @@ function render(passedDeck, deckId)
 
         //option1.setAttribute("onclick", "playcard")
 
+        //option to discard
         var option2 = document.createElement("option");
         option2.setAttribute("value", "Discard");
 
+        //option to discharge
         var option3 = document.createElement("option");
         option3.setAttribute("value", "Discharge");
 
+        //setting the text on the select box
         var textNode = document.createTextNode("Play");
         option1.appendChild(textNode);
 
+        //setting the text on the select box
         textNode = document.createTextNode("Discard");
-
         option2.appendChild(textNode);
 
+        //setting the text on the select box
         textNode = document.createTextNode("Discharge");
-
         option3.appendChild(textNode);
 
+        //appending the different options to our select box so one can be chosen
         select.appendChild(option1);
         select.appendChild(option2);
         select.appendChild(option3);
 
-        /** 
-        console.log(card.getAttribute("data-name"));
-        console.log(card.getAttribute("data-rank"));
-        console.log(card.getAttribute("data-type"));
-
-        */
-
-        //card.setAttribute("ondragend", )
+        //appends the created card to the correct deckID
         document.getElementById(deckId).appendChild(card);
 	}
 }
@@ -171,15 +179,9 @@ function findCard(passedDeck, name, rank, type, newDeck)
 {
     for(var i = 0; i < passedDeck.length; i++)
     {
-        //console.log(i)
-        //console.log("rank is + " + rank);
         if(passedDeck[i].Rank == rank && passedDeck[i].Name == name && passedDeck[i].Type == type)
         {
             newDeck[newDeck.length] = passedDeck.splice(i,i);
-            /**
-            render(newDeck, 'board');
-            render(passedDeck, 'hand1');
-            */
         }
     }
 }
@@ -192,19 +194,13 @@ function playCard(name, rank, type)
 
 function load()
 {
+    //deck for user 1
     deck = createDeck();
+    //deck for user 2
     deck2 = createDeck();
+    //shuffle deck1
     shuffle(deck, 'deck1');
-    //shuffle(deck2, 'deck2');
-    //render(deck, 'deck1');
-    //render(deck2, 'deck2');
-    //console.log(deck[0].type);
-    //let x = deck[0];
-    //console.log(x.Rank);
-    //findCard(deck, "Rewind", 5, "unstable");
 }
-
-
-//const myInterval = setInterval(getScore(hand1, 'score1'), 1000);
+//executes load function when the browser window loads 
 window.onload = load;
 
