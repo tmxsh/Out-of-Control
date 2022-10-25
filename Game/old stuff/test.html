@@ -1,0 +1,38 @@
+<html>
+<head>
+    <link rel="stylesheet" href="../styles/style.css">
+    <script type="text/javascript" src="main.js" defer></script>
+</head>
+<div class = "header">
+    <h1> Welcome to Out of Control!</h1>
+</div>
+<body>
+    <div class="deck1">
+        <h1>Player one Deck</h1>
+
+        <a href="javascript:void(0)" class="btn" onclick="shuffle(deck, 'deck1')">Shuffle</a>
+        <div id="deck1"></div>
+    </div>
+
+    <div class="hand1">
+        <h1>Player one Hand</h1>
+
+        <a href="javascript:void(0)" class="btn" onclick="draw(deck, hand1, 'deck1', 'hand1')">Draw</a>
+        <div id="hand1"></div>
+    </div>
+
+    <div class="deck2">
+        <h1>Player two Deck</h1>
+
+        <a href="javascript:void(0)" class="btn" onclick="shuffle(deck2, 'deck2')">Shuffle</a>
+        <div id="deck2"></div>
+    </div>
+
+    <div class="hand2">
+        <h1>Player Two Hand</h1>
+
+        <a href="javascript:void(0)" class="btn" onclick="draw(deck2, hand2, 'deck2', 'hand2')">Draw</a>
+        <div id="hand2"></div>
+    </div>
+</body>
+</html>
