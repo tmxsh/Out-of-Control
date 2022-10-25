@@ -1,4 +1,6 @@
 <?php
+
+//credentials and names to connect to the server
 $servername = "localhost";
 $username = "tmxshio_connect";
 $password = "seahorse?1B";

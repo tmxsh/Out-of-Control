@@ -3,36 +3,78 @@
     <link rel="stylesheet" href="../styles/game.css">
     <script type="text/javascript" src="../scripts/main.js" defer></script>
 </head>
+
+<script>
+    function allowDrop(ev) {
+      ev.preventDefault();
+    }
+    /**
+    function drop(ev) {
+      //stops the default behavior  
+      ev.preventDefault();
+
+      //pop the card from the hand to the board var in main.js
+      board[board.length] = hand1.pop();
+
+      //render the board
+      render(board, 'board');
+      //render the hand
+      render(hand1, 'hand1');
+      //update the score
+      getScore(board, "score");
+      
+
+    }
+    **/
+
+    function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+    console.log(ev.target.id);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  //ev.target.appendChild(document.getElementById(data));
+  //console.log(data);
+}
+</script>
+
 <div class = "header">
     <h1> Welcome to Out of Control!</h1>
 </div>
 <body>
-    <div class="deck1">
-        <h1>Player one Deck</h1>
+    <div class="wrapper">
+        <div class="hd">
+            <a href="../index.html"> Homepage </a> 
+        </div>
 
-        <a href="javascript:void(0)" class="btn" onclick="shuffle(deck, 'deck1')">Shuffle</a>
-        <div id="deck1"></div>
+        <div class="login">
+            <a href="../login/login.html"> Click here to log in</a>
+        </div>
+
+
+        <div class="board" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h1> Your Board </h1>
+            <div id="board"></div>
+        </div>
+
+        <div class="score">
+            <h1> Your Score </h1>
+            <p id="score"> 0 </p>
+        </div>
+
+        <div class="graveyard">
+            <h1> Your Graveyard </h1>
+        </div>
+
+        <div class="hand">
+            <h1>Player one Hand</h1>
+    
+            <a href="javascript:void(0)" class="btn" onclick="draw(deck, hand1, 'deck1', 'hand1')">Draw</a>
+            <div id="hand1"></div>
+        </div>
     </div>
-
-    <div class="hand1">
-        <h1>Player one Hand</h1>
-
-        <a href="javascript:void(0)" class="btn" onclick="draw(deck, hand1, 'deck1', 'hand1')">Draw</a>
-        <div id="hand1"></div>
-    </div>
-
-    <div class="deck2">
-        <h1>Player two Deck</h1>
-
-        <a href="javascript:void(0)" class="btn" onclick="shuffle(deck2, 'deck2')">Shuffle</a>
-        <div id="deck2"></div>
-    </div>
-
-    <div class="hand2">
-        <h1>Player Two Hand</h1>
-
-        <a href="javascript:void(0)" class="btn" onclick="draw(deck2, hand2, 'deck2', 'hand2')">Draw</a>
-        <div id="hand2"></div>
-    </div>
+   
 </body>
 </html>
