@@ -192,6 +192,11 @@ function getScore(passedHand, passedID)
         score = score + passedHand[i].Rank;
         //update score
     }
+    
+    if(score >= 21)
+    {
+        document.write("<h1>" + "YOU WIN!" + "</h1>")
+    }
     //append the score to the HTML
     document.getElementById(passedID).innerHTML = score.toString();
 }
