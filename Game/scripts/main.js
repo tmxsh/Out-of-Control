@@ -11,6 +11,8 @@ var names = ["Rift", "Reactor", "Force Field" , "Exotic Matter", "Deflector", "A
 var ranks = [1, 2, 3, 4, 4, 5,  5,6, 6, 7, 8, 9, 10]
 var startLocation = 0;
 
+var dischargeVal = 0;
+
 //deck for player one, hand for player 1
 var deck1 = new Array();
 var hand1 = new Array();
@@ -92,21 +94,16 @@ function shuffle(passedDeck, deckId)
 
 function selectOption(value, name, rank, type,location)
 {
-    console.log("location is " + location);
-    console.log("hehe");
-    if(value == "0")
+    if(value == "0") //the player selected play
     {
-        console.log("hoho");
         playCard(name, rank, type);
     }
-    if(value == "1")
+    if(value == "1") //player selected discard
     {
-        console.log("discarding");
         discard(name, rank, type, location);
     }
-    if(value == "2")
+    if(value == "2") //player selected discharge
     {
-        console.log("discharging");
         discharge(name, rank, type, location);
     }
 }
@@ -208,18 +205,19 @@ function render(passedDeck, deckId)
 function draw(passedDeck, passedHand, deckName, handName)
 {
     passedHand[passedHand.length] = passedDeck.pop();
-    render(passedHand, handName);
+    
+    renderAll();
 }
 
-function getScore(passedHand, passedID)
+function getScore()
 {
     //initialized score - starts at 0, for obvious reasons
     var score = 0;
 
-    for(var i = 0; i < passedHand.length; i++)
+    for(var i = 0; i < board.length; i++)
     {
         //walk through the board(I originally thought it was the hand where the score came from)
-        score = score + passedHand[i].Rank;
+        score = score + board[i].Rank;
         //update score
     }
     
@@ -228,7 +226,7 @@ function getScore(passedHand, passedID)
         alert("YOU WIN!!");
     }
     //append the score to the HTML
-    document.getElementById(passedID).innerHTML = score.toString();
+    document.getElementById('score').innerHTML = score.toString();
 }
 
 function findCardIndex(passedDeck,name, rank, type)
@@ -264,15 +262,14 @@ function playCard(name, rank, type, location) //you will only play cards from th
     //findCard(hand1, name, rank, type, board);
     let x = findCardIndex(hand1, name, rank, type);
     hand1[x].Location = 1; //change location to board
-    board[board.length] = hand1[x];
-    console.log(board[board.length - 1]);
-    hand1.splice(x,1);
-    if(type == "stable")
+    board[board.length] = hand1[x];//add the card to the board
+    hand1.splice(x,1); //remove the card from the hand
+    if(type == "stable") //stable cards call their abilities when they are played
     {
         ability(name, rank, type, location);
     }
-    render(board, 'board');
-    render(hand1, 'hand1');
+
+    renderAll();
 }
 
 function discard(name, rank, type,location)
@@ -282,30 +279,175 @@ function discard(name, rank, type,location)
     {
         let x = findCardIndex(hand1, name, rank, type);
         hand1[x].location = 2; //change location to the graveyard
-        graveyard[graveyard.length] = hand1[x];
-        console.log(graveyard[graveyard.length - 1]);
-        hand1.splice(x,1);
-        render(graveyard, 'graveyard');
-        render(hand1, 'hand1');
+        graveyard[graveyard.length] = hand1[x]; //add card to the graveyard
+        hand1.splice(x,1); //remove the card from the hand
+        
+        renderAll();
     }
     if(location == 1) //this card is on the board
     {
         let x = findCardIndex(board, name, rank, type);
         board[x].location = 2; //change location to the graveyard
-        graveyard[graveyard.length] = board[x];
-        board.splice(x,1);
-        render(graveyard, 'graveyard');
-        render(board, 'board');
+        graveyard[graveyard.length] = board[x]; //add the card to the graveyard
+        board.splice(x,1); //remove the card from the board
+        renderAll();
     }
 
 }
 
 function discharge(name, rank, type, location)
 {
+    //alert to tell the player what to do
     alert("Choose a card of lower or equal value on the board to discard");
+    //call discard to put the card in the
+    dischargeVal = rank;
     discard(name, rank, type, location);
 }
 
+function dischargeBoard(name, rank, type, location)
+{
+    if(rank <= dischargeVal)
+    {
+        discard(name, rank, type, location);
+        dischargeVal = 0;
+    }
+    else
+    {
+        alert("Choose a different card to discharge - this card is worth too much");
+    }
+}
+
+function renderHand()
+{
+    document.getElementById('hand1').innerHTML = ''; //set the innerHTML to nothing
+    
+    for(var i = 0; i < hand1.length; i++)
+    {
+        var card = document.createElement("div");
+        var rank = document.createElement("div");
+        var type = document.createElement("div");
+
+        var select = document.createElement("select"); //create our drop down
+        //this is the function call
+        var s = "selectOption(this.value," + "'" + hand1[i].Name + "'" + "," + hand1[i].Rank + "," + "'" + hand1[i].Type + "'" + ","  + hand1[i].Location + ")";
+
+        //when the button is changed, call the function specified above
+        select.setAttribute("onchange", s);
+        //add the select box to the cards
+        document.body.appendChild(select);
+
+         //sets rank based on the rank of the card
+		rank.innerHTML = hand1[i].Name + " (" + hand1[i].Rank + ")" + "( " + hand1[i].Type + ")";
+
+        //appends the rank type and select button to the card element
+		card.appendChild(rank);
+		card.appendChild(type);
+        card.appendChild(select);
+
+        card.className = "card";
+        //used to set the id
+        var s = rank.toString + type.toString;
+
+        var blank = document.createElement("option");
+        blank.setAttribute("value", "Select a move");
+        blank.setAttribute("selected", "selected");
+        select.appendChild(blank);
+        blank.appendChild(document.createTextNode("Select an Option"));
+        for(var k = 0; k < 3; k++)
+        {
+            var option = document.createElement("option");
+            option.setAttribute("value", k);
+            select.appendChild(option);
+            if(k == 0)
+                option.appendChild(document.createTextNode("Play"));
+            if(k == 1)
+                option.appendChild(document.createTextNode("Discard"));
+            if(k == 2)
+                option.appendChild(document.createTextNode("Discharge"));
+        }
+
+        document.getElementById('hand1').appendChild(card);
+
+    }
+}
+
+function renderBoard()
+{
+    //get the board
+    document.getElementById('board').innerHTML = '';
+    for(var i = 0; i < board.length; i++)
+    {
+        var card = document.createElement("div");
+        var rank = document.createElement("div");
+		var type = document.createElement("div");
+        //create the button to discharge
+        var select = document.createElement("select");
+        var s = "dischargeBoard(" + "'" + board[i].Name + "'" + "," + board[i].Rank + "," + "'" + board[i].Type + "'" + "," + board[i].Location + ")";
+
+        select.setAttribute("onchange", s);
+
+        document.body.appendChild(select);
+
+        card.className = "card";
+
+         //sets rank based on the rank of the card
+		rank.innerHTML = board[i].Name + " (" + board[i].Rank + ")" + "( " + board[i].Type + ")";
+
+        card.appendChild(rank);
+        card.appendChild(type);
+        card.appendChild(select);
+
+        var blank = document.createElement("option");
+        blank.setAttribute("value", "Select a move");
+        blank.setAttribute("selected", "selected");
+        select.appendChild(blank);
+
+        var option = document.createElement("option");
+        blank.appendChild(document.createTextNode("Select an option"));
+        option.appendChild(document.createTextNode("Discharge"));
+
+        select.appendChild(option);
+
+        document.getElementById('board').appendChild(card);
+
+    }
+}
+
+function renderGrave()
+{
+    document.getElementById('graveyard').innerHTML = '';
+    for(var i = 0; i < graveyard.length; i++)
+    {
+        var card = document.createElement("div");
+		var rank = document.createElement("div");
+		var type = document.createElement("div");
+
+
+        card.className = "card";
+		rank.className = "rank";
+		type.className = "type" + graveyard[i].Type;
+
+        //sets rank based on the rank of the card
+		rank.innerHTML = graveyard[i].Name + " (" + graveyard[i].Rank + ")" + "( " + graveyard[i].Type + ")";
+
+          //appends the rank type and select button to the card element
+		card.appendChild(rank);
+		card.appendChild(type);
+        //card.appendChild(select);
+        //used to set the id
+
+        document.getElementById('graveyard').appendChild(card);
+    }
+}
+
+function renderAll()
+{
+    renderHand();
+    renderBoard();
+    renderGrave();
+
+    getScore();
+}
 function load()
 {
     //deck for user 1
@@ -314,6 +456,14 @@ function load()
     deck2 = createDeck();
     //shuffle deck1
     shuffle(deck, 'deck1');
+
+    for(var i = 0; i < 7; i++)
+    {
+        draw(deck, hand1, 'deck1', 'hand1');
+    }
+    
+    //setTimeout(renderHand(), 1000);
+    renderAll();
 }
 //executes load function when the browser window loads 
 window.onload = load;
