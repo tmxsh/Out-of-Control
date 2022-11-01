@@ -1,8 +1,10 @@
+
+
 //These are the two types of cards
 var types = ["stable", "unstable"];
 //Names of the cards - shows on the front 
-var names = ["Rift", "Exotic Matter", "Deflector", "Anomoly", 
-"Wormhole", "Rewind", "Reactor", "Future Shift", "Dark Energy", "Singularity", 
+var names = ["Rift", "Reactor", "Exotic Matter", "Deflector", "Anomoly", 
+"Wormhole", "Rewind", "Future Shift", "Dark Energy", "Singularity", 
 "Antimatter", "Time Stop", "Nova"];
 
 //different ranks for the cards - goes 1 through 10
@@ -21,6 +23,20 @@ var hand2 = new Array();
 var board = new Array();
 
 var graveyard = new Array();
+
+
+function ability(name, rank, type, location)
+{
+    console.log("Name is " + name);
+    if(name == "Rift")
+    {
+        draw(deck, hand1, 'deck1', 'hand1');
+    }
+    if(name == "Reactor")
+    {
+        alert("Choose a card in play to mimic its ability, or use it for diffusion");
+    }
+}
 
 function createDeck()
 {
@@ -247,6 +263,10 @@ function playCard(name, rank, type, location) //you will only play cards from th
     board[board.length] = hand1[x];
     console.log(board[board.length - 1]);
     hand1.splice(x,1);
+    if(type == "stable")
+    {
+        ability(name, rank, type, location);
+    }
     render(board, 'board');
     render(hand1, 'hand1');
 }

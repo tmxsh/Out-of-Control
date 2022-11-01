@@ -1,4 +1,7 @@
-function rift()
+function ability(name, rank, type, location)
 {
-    return 0;
+    if(name == "rift")
+    {
+        draw(deck, hand1, 'deck1', 'hand1');
+    }
 }
