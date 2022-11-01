@@ -3,7 +3,7 @@
 //These are the two types of cards
 var types = ["stable", "unstable"];
 //Names of the cards - shows on the front 
-var names = ["Rift", "Reactor", "Exotic Matter", "Deflector", "Anomoly", 
+var names = ["Rift", "Reactor", "Force Field" , "Exotic Matter", "Deflector", "Anomoly", 
 "Wormhole", "Rewind", "Future Shift", "Dark Energy", "Singularity", 
 "Antimatter", "Time Stop", "Nova"];
 
@@ -35,6 +35,10 @@ function ability(name, rank, type, location)
     if(name == "Reactor")
     {
         alert("Choose a card in play to mimic its ability, or use it for diffusion");
+    }
+    if(name == "Exotic Matter")
+    {
+        alert("You may play another card worth 3 or less");
     }
 }
 
