@@ -7,6 +7,7 @@ var names = ["Rift", "Exotic Matter", "Deflector", "Anomoly",
 
 //different ranks for the cards - goes 1 through 10
 var ranks = [1, 2, 3, 4, 4, 5,  5,6, 6, 7, 8, 9, 10]
+var startLocation = 0;
 
 //deck for player one, hand for player 1
 var deck1 = new Array();
@@ -18,6 +19,8 @@ var hand2 = new Array();
 
 //this board is where cards go when they get played 
 var board = new Array();
+
+var graveyard = new Array();
 
 function createDeck()
 {
@@ -32,7 +35,7 @@ function createDeck()
             {
                 for(let k = 0; k < 4; k++) //first four ranks are stable
                 {
-                    let card = {Type: types[j], Name: names[k], Rank: ranks[k]};
+                    let card = {Type: types[j], Name: names[k], Rank: ranks[k], Location: 0};
                     deck.push(card);
                 }
                 
@@ -41,7 +44,7 @@ function createDeck()
             {
                 for(let k = 4; k < names.length; k++)
                 {
-                    let card = {Type: types[j], Name: names[k], Rank: ranks[k]};
+                    let card = {Type: types[j], Name: names[k], Rank: ranks[k], Location: 0};
                     deck.push(card);
                 }
             }
@@ -67,13 +70,24 @@ function shuffle(passedDeck, deckId)
     }
 }
 
-function selectOption(value, name, rank, type)
+function selectOption(value, name, rank, type,location)
 {
+    console.log("location is " + location);
     console.log("hehe");
     if(value == "0")
     {
         console.log("hoho");
         playCard(name, rank, type);
+    }
+    if(value == "1")
+    {
+        console.log("discarding");
+        discard(name, rank, type, location);
+    }
+    if(value == "2")
+    {
+        console.log("discharging");
+        discharge(name, rank, type, location);
     }
 }
 function render(passedDeck, deckId)
@@ -90,9 +104,10 @@ function render(passedDeck, deckId)
 
         //creates the select option on the cards 
         var select = document.createElement("select");
-        var s = "selectOption(this.value," + "'" + passedDeck[i].Name + "'" + "," + passedDeck[i].Rank + "," + "'" + passedDeck[i].Type + "'" + ")";
+        var s = "selectOption(this.value," + "'" + passedDeck[i].Name + "'" + "," + passedDeck[i].Rank + "," + "'" + passedDeck[i].Type + "'" + ","  + passedDeck[i].Location + ")";
 
-        console.log(s);
+        //console.log(passedDeck[i].Location)
+        //console.log(s);
         select.setAttribute("onchange", s);
         //creates a body for us to put the options for the select button
         document.body.appendChild(select);
@@ -134,7 +149,6 @@ function render(passedDeck, deckId)
 
         var option1 = document.createElement("option");
         option1.setAttribute("value", "0");
-        //option1.setAttribute("onclick", playCard(passedDeck[i].Name, passedDeck[i].Rank, passedDeck[i].Type));
     
         //option to discard
         var option2 = document.createElement("option");
@@ -173,12 +187,8 @@ function render(passedDeck, deckId)
 
 function draw(passedDeck, passedHand, deckName, handName)
 {
-    //console.log(hand.length);
     passedHand[passedHand.length] = passedDeck.pop();
-    //renderHand(hand, handName);
     render(passedHand, handName);
-
-    
 }
 
 function getScore(passedHand, passedID)
@@ -195,29 +205,30 @@ function getScore(passedHand, passedID)
     
     if(score >= 21)
     {
-        document.write("<h1>" + "YOU WIN!" + "</h1>")
+        alert("YOU WIN!!");
     }
     //append the score to the HTML
     document.getElementById(passedID).innerHTML = score.toString();
 }
 
+function findCardIndex(passedDeck,name, rank, type)
+{
+    for(var i = 0; i < passedDeck.length; i++)
+    {
+        if(passedDeck[i].Rank == rank && passedDeck[i].Name == name && passedDeck[i].Type == type)
+        {
+            return i;
+        }
+    }
+}
 function findCard(passedDeck, name, rank, type, newDeck)
 {
     for(var i = 0; i < passedDeck.length; i++)
     {
-        /**
-        console.log("name is " + name);
-        console.log("rank is " + rank);
-        console.log("type is " + type);
-        console.log(passedDeck[i]);
-        */
-
         if(passedDeck[i].Rank == rank && passedDeck[i].Name == name && passedDeck[i].Type == type)
         {
             newDeck[newDeck.length] = passedDeck[i];
             passedDeck.splice(i, 1);
-            //console.log(newDeck[newDeck.length - 1]);
-            //
             return;
         }
         else
@@ -227,12 +238,48 @@ function findCard(passedDeck, name, rank, type, newDeck)
     }
 }
 
-function playCard(name, rank, type)
+function playCard(name, rank, type, location) //you will only play cards from the hand
 {
     console.log("playing card");
-    findCard(hand1, name, rank, type, board);
+    //findCard(hand1, name, rank, type, board);
+    let x = findCardIndex(hand1, name, rank, type);
+    hand1[x].Location = 1; //change location to board
+    board[board.length] = hand1[x];
+    console.log(board[board.length - 1]);
+    hand1.splice(x,1);
     render(board, 'board');
     render(hand1, 'hand1');
+}
+
+function discard(name, rank, type,location)
+{
+    console.log("discarding card");
+    if(location == 0) //this card is in the hand
+    {
+        let x = findCardIndex(hand1, name, rank, type);
+        hand1[x].location = 2; //change location to the graveyard
+        graveyard[graveyard.length] = hand1[x];
+        console.log(graveyard[graveyard.length - 1]);
+        hand1.splice(x,1);
+        render(graveyard, 'graveyard');
+        render(hand1, 'hand1');
+    }
+    if(location == 1) //this card is on the board
+    {
+        let x = findCardIndex(board, name, rank, type);
+        board[x].location = 2; //change location to the graveyard
+        graveyard[graveyard.length] = board[x];
+        board.splice(x,1);
+        render(graveyard, 'graveyard');
+        render(board, 'board');
+    }
+
+}
+
+function discharge(name, rank, type, location)
+{
+    alert("Choose a card of lower or equal value on the board to discard");
+    discard(name, rank, type, location);
 }
 
 function load()
