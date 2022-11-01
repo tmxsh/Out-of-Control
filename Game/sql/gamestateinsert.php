@@ -3,11 +3,16 @@
 
 <?php 
     //needed to connect to the sql server
-    include("connection.php");
+    include("gamestate.php");
       
     //these are received from the login form  
-	$username   = $_GET["Username"];
-	$password = $_GET["Password"];
+    	$deckp1 = $_GET["deckp1"];
+    	$deckp2 = $_GET["deckp2"];
+    	$board = $_GET["board"];
+	$handp1 = $_GET["handp1"];
+	$handp2 = $_GET["handp2"];
+	$graveyardp1 = $_GET["graveyardp1"];
+	$graveyardp2 = $_GET["graveyardp2"];
 
     //our sql query
 	$sql = "INSERT INTO login values ('".$username."','".$password."')";
