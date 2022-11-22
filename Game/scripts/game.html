@@ -1,0 +1,83 @@
+<html>
+<head>
+    <style> 
+        .board { grid-area:board; width:70%; height:50%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: center; color:white; float:left;}
+
+        .hd { grid-area:hd; margin:auto; background: violet; text-align:center; float:left; width:80%;}
+
+        .login { grid-area:hd; margin:auto; background: violet; text-align:center; float:right; width:20%;}
+
+        .header{ margin:auto; background: violet; text-align:center;}
+
+        .score{ grid-area:score; width:25%; height:10%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: center; color:white; float:right;}
+
+        .graveyard{ width:25%; height:30%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: center; color:white; float:right;}
+
+        .hand{ position:fixed; bottom:0; height: 40%; width:97.3%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: left; color:white;}
+
+        .card{ padding: 10px; border: solid 1px #808080; background-color: white; display: inline-block; border-radius: 10px; font-size: 14pt; text-align: top; color:black; margin: 3px; vertical-align: top;}
+
+
+        .btn{ background:white; padding: 10px 20px; border-radius:30px; margin: 10px; display:inline-block;}
+
+        .wrapper{ width: 100%; height: 100%;}
+        
+    </style>
+</head>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+
+  socket.on('chat message', function(msg) {
+    var item = document.createElement('li');
+    item.textContent = msg;
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+
+  socket.on('too many', function(msg) {
+    var item = document.createElement('li');
+    item.textContent = msg;
+    messages.appendChild(item);
+  });
+</script>
+
+<div class = "header">
+    <h1> Welcome to Out of Control!</h1>
+</div>
+<body>
+    <div class="wrapper">
+        <div class="hd">
+            <a href="../index.html"> Homepage </a> 
+        </div>
+
+        <div class="login">
+            <a href="../login/login.html"> Click here to log in</a>
+        </div>
+
+
+        <div class="board" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h1> Your Board </h1>
+            <div id="board"></div>
+        </div>
+
+        <div class="score">
+            <h1> Your Score </h1>
+            <p id="score"> 0 </p>
+        </div>
+
+        <div class="graveyard">
+            <h1> Your Graveyard </h1>
+            <div id="graveyard"></div>
+        </div>
+
+        <div class="hand">
+            <h1>Player one Hand</h1>
+    
+            <a href="javascript:void(0)" class="btn" onclick="draw(deck, hand1, 'deck1', 'hand1')">Draw</a>
+            <div id="hand1"></div>
+        </div>
+    </div>
+   
+</body>
+</html>
