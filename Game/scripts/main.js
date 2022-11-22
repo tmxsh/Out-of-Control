@@ -1,3 +1,4 @@
+/*
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 server.listen(3000, () => {
     console.log('listening on *:3000');
 });
+*/
 
 
 
@@ -491,5 +493,5 @@ function load()
     renderAll();
 }
 //executes load function when the browser window loads 
-//window.onload = load;
+window.onload = load;
 
