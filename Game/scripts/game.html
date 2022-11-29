@@ -118,38 +118,56 @@ function ability(name, rank, type, location)
     if(name == "Reactor")
     {
         alert("Choose a card in play to mimic its ability, or use it for diffusion");
+		    //need board based context action to select for this ability
     }
     if(name == "Exotic Matter")
     {
-        alert("You may play another card worth 3 or less");
+        alert("You may play another card worth 3 or less")
+		    //wormhole slection method unkown?
     }
     if(name == "Anomaly")
     {
-        alert("empty string")
+        alert("Select a stable card to destory")
+		    //need context action for the board for Anomaly, Rewind, Reactor, & Dark Energy
     }
     if(name == "Wormhole")
     {
-        alert("empty string")
+        alert("Select a card from the graveyard to return to your hand")
+		    //need a context action for slecting from graveyard
     }
     if(name == "Rewind")
     {
         alert("Pick a card to be placed onto the bottom of its deck")
+		    //need a way to select a cardon the board for this ability
     }
     if(name == "Dark Energy")
     {
         alert("Pick a stable card on the board to take control of")
+		    //need a way to select a card on the board for this ability
     }
     if(name == "Singularity")
     {
         alert("Board Wiped")
+	for(let i = 0, i < board.length ; i++) {
+			if board[i].type == "unstable" {
+				discard(board[i].name, board[i].rank, board[i].type, board[i].location)
+					i--
+				}
+	}
     }
     if(name == "Antimatter")
     {
         alert("discard two cards at random")
+		    //Math.floor(Math.random() * put enemy player hand size here)
+		    //discard
+		    //Math.floor(Math.random() * put enemy player new hand size here)
+		    //discard
+		    //need to know which player activated this ability
     }
     if(name == "Time Stop")
     {
         alert("Time stopped?")
+		    //need to discuss what this abilty will actually be
     }
 }
 
@@ -161,6 +179,7 @@ function createDeck()
     for(let i = 0; i < 2; i++)
     {
         for(let j = 0; j < types.length;j++)
+
         {
             if(j == 0) //stable loop
             {
