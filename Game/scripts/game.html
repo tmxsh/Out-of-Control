@@ -1,27 +1,118 @@
 <html>
 <head>
     <style> 
-        .board { grid-area:board; width:70%; height:50%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: center; color:white; float:left;}
+       h1{
+    border:solid;
+    height:auto;
+    background-color: yellow;
+    margin: 0%;
+    padding: 0%;
+}
+div{
+    border:solid;
+    height:auto;
+    display:inline;
+    margin: 0%;
+    padding:0%;
+   
+}
+.playBoard{
+    background-color: aliceblue;
+}
+.hd{
+    grid-area: hd;
+    background-color:red;
+}
+#boardWrapper{
+    border:solid;
+    column-gap:0;
+    display:grid;
+    height:100%;
+    width:100%;
+    grid-template-columns: repeat(10, 1fr);
+    grid-auto-rows:minmax(auto, auto);
+    grid-template-areas:
+        "hd hd hd hd hd hd hd hd hd hd"
+        "hd hd hd hd hd hd hd hd hd hd"
+        "board board board board board board board board score score"
+        "board board board board board board board board score score"
+        "board board board board board board board board graveyard graveyard"
+        "board board board board board board board board graveyard graveyard"
+        "board board board board board board board board graveyard graveyard"
+        "board board board board board board board board graveyard graveyard"
+        "hand hand hand hand hand hand hand hand hand hand"
+        "hand hand hand hand hand hand hand hand hand hand";
 
-        .hd { grid-area:hd; margin:auto; background: violet; text-align:center; float:left; width:80%;}
+    
+}
+.card{
+    height:auto;
+    width:auto;
+    padding: 10px;
+	border: solid 1px #808080;
+	background-color: white;
+	display: inline-flex;
+	border-radius: 10px;
+	font-size: 14pt;
+	text-align: top;
+	color:black;
+	margin: 3px;
+	vertical-align: top;
+}
+.board{
+    border:solid;
+    grid-area:board;
+    padding:0%;
+    margin: 0%;
 
-        .login { grid-area:hd; margin:auto; background: violet; text-align:center; float:right; width:20%;}
+    display:grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-auto-rows:minmax(auto, auto);
+    grid-template-areas:
+        "yb yb yb yb yb yb yb yb yb yb"
+        "b1 b1 b1 b1 b1 b1 b1 b1 b1 b1"
+        "b1 b1 b1 b1 b1 b1 b1 b1 b1 b1"
+        "b1 b1 b1 b1 b1 b1 b1 b1 b1 b1"
+        "b1 b1 b1 b1 b1 b1 b1 b1 b1 b1"
+        "b1 b1 b1 b1 b1 b1 b1 b1 b1 b1"
+        "b1 b1 b1 b1 b1 b1 b1 b1 b1 b1"
+        "b1 b1 b1 b1 b1 b1 b1 b1 b1 b1"
+        "b2 b2 b2 b2 b2 b2 b2 b2 b2 b2"
+        "b2 b2 b2 b2 b2 b2 b2 b2 b2 b2"
+        "b2 b2 b2 b2 b2 b2 b2 b2 b2 b2"
+        "b2 b2 b2 b2 b2 b2 b2 b2 b2 b2"
+        "b2 b2 b2 b2 b2 b2 b2 b2 b2 b2"
+        "b2 b2 b2 b2 b2 b2 b2 b2 b2 b2"
+        "b2 b2 b2 b2 b2 b2 b2 b2 b2 b2";
+    
+}
+.yourBoard{
+    grid-area: yb;
+}
+.score{
+    grid-area: score;
+}
 
-        .header{ margin:auto; background: violet; text-align:center;}
+.hand{
+    grid-area:hand;
+}
 
-        .score{ grid-area:score; width:25%; height:10%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: center; color:white; float:right;}
+.graveyard{
+    grid-area: graveyard;
+}
 
-        .graveyard{ width:25%; height:30%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: center; color:white; float:right;}
+.hand2{
+    grid-area:hand2;
+}
 
-        .hand{ position:fixed; bottom:0; height: 40%; width:97.3%; margin: 20px auto; background:dodgerblue; border:solid 10px black; padding: 10px; border-radius:10px; text-align: left; color:white;}
+#board1{
+    grid-area:b1;
+}
 
-        .card{ padding: 10px; border: solid 1px #808080; background-color: white; display: inline-block; border-radius: 10px; font-size: 14pt; text-align: top; color:black; margin: 3px; vertical-align: top;}
+#board2{
+    grid-area:b2;
+}
 
-
-        .btn{ background:white; padding: 10px 20px; border-radius:30px; margin: 10px; display:inline-block;}
-
-        .wrapper{ width: 100%; height: 100%;}
-        
     </style>
 </head>
 <script src="/socket.io/socket.io.js"></script>
@@ -45,36 +136,37 @@
     <h1> Welcome to Out of Control!</h1>
 </div>
 <body>
-    <div class="wrapper">
+    <div id = "boardWrapper">
         <div class="hd">
-            <a href="/index.html"> Homepage </a> 
+            <div>
+                <a href="/index.html"> Homepage </a> 
+            </div>
+        
+            <div class="login">
+                <a href="../login/login.html"> Click here to log in</a>
+            </div>
         </div>
 
-        <div class="login">
-            <a href="../login/login.html"> Click here to log in</a>
+        <div class="board">
+            <h1 class="yourBoard"> Your Board </h1>
+            <div class="playBoard" id="board1">board1</div>
+            <div class="playBoard" id="board2">board2</div>
         </div>
-
-
-        <div class="board" ondrop="drop(event)" ondragover="allowDrop(event)">
-            <h1> Your Board </h1>
-            <div id="board"></div>
-        </div>
-
+    
         <div class="score">
             <h1> Your Score </h1>
             <p id="score"> 0 </p>
         </div>
-
+    
         <div class="graveyard">
             <h1> Your Graveyard </h1>
-            <div id="graveyard"></div>
+            <div id="graveyard">graveyard</div>
         </div>
-
-        <div class="hand">
-            <h1>Player one Hand</h1>
     
-            <a href="javascript:void(0)" class="btn" onclick="draw(deck, hand1, 'deck1', 'hand1')">Draw</a>
-            <div id="hand1"></div>
+        <div class="hand">
+            <h1>Your Hand</h1>
+            <a class="draw" href="javascript:void(0)" class="btn" onclick="draw(deck, hand1, 'deck1', 'hand1')">Draw</a>
+            <div id="hand1">hand1</div>
         </div>
     </div>
    
@@ -107,7 +199,7 @@ var board = new Array();
 
 var graveyard = new Array();
 
-
+/*
 function ability(name, rank, type, location)
 {
     console.log("Name is " + name);
@@ -170,7 +262,7 @@ function ability(name, rank, type, location)
 		    //need to discuss what this abilty will actually be
     }
 }
-
+*/
 function createDeck()
 {
     //Each player gets 26 cards in their deck - two of each card
@@ -502,7 +594,7 @@ function renderHand()
 function renderBoard()
 {
     //get the board
-    document.getElementById('board').innerHTML = '';
+    document.getElementById('board2').innerHTML = '';
     for(var i = 0; i < board.length; i++)
     {
         var card = document.createElement("div");
@@ -536,7 +628,7 @@ function renderBoard()
 
         select.appendChild(option);
 
-        document.getElementById('board').appendChild(card);
+        document.getElementById('board2').appendChild(card);
 
     }
 }
