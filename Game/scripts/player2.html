@@ -117,6 +117,7 @@ div{
 </head>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+    /**
     var socket = io();
 
     socket.emit('draw', "1"); //send reques for initial draw
@@ -143,6 +144,7 @@ div{
             hand.innerHTML = "";
         }
     });
+    */
 
 </script>
 <div class = "header">
@@ -186,6 +188,17 @@ div{
 </body>
 
 <script>
+
+var socket = io();
+
+socket.on('play1', function(msg){
+    console.log(msg + "played");
+});
+
+
+
+
+
     //These are the two types of cards
 var types = ["stable", "unstable"];
 //Names of the cards - shows on the front 
@@ -330,6 +343,7 @@ function selectOption(value, name, rank, type,location)
     if(value == "0") //the player selected play
     {
         playCard(name, rank, type);
+        socket.emit("play", name + " " + rank + " " + type);
     }
     if(value == "1") //player selected discard
     {
@@ -729,7 +743,7 @@ function renderGrave()
 
 function renderAll()
 {
-    //renderHand();
+    renderHand();
     renderBoard();
     renderGrave();
 

@@ -117,6 +117,7 @@ div{
 </head>
 <script src="/socket.io/socket.io.js"></script>
 <script>
+    /**
     var socket = io();
 
     socket.emit('draw', "1"); //send reques for initial draw
@@ -143,7 +144,7 @@ div{
             //hand.innerHTML = "";
         }
     });
-
+    */
 </script>
 <div class = "header">
     <h1> Welcome to Out of Control!</h1>
@@ -186,6 +187,23 @@ div{
 </body>
 
 <script>
+
+
+var socket = io();
+
+socket.on('play2', function(msg) {
+    console.log(msg + " played by player 2");
+});
+
+
+
+
+
+
+
+
+
+
     //These are the two types of cards
 var types = ["stable", "unstable"];
 //Names of the cards - shows on the front 
@@ -330,6 +348,7 @@ function selectOption(value, name, rank, type,location)
     if(value == "0") //the player selected play
     {
         playCard(name, rank, type);
+        socket.emit("play", name + " " + rank + " " + type);
     }
     if(value == "1") //player selected discard
     {
@@ -729,7 +748,7 @@ function renderGrave()
 
 function renderAll()
 {
-    //renderHand();
+    renderHand();
     renderBoard();
     renderGrave();
 

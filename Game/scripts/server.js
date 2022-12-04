@@ -37,7 +37,7 @@ io.on('connection', (socket) => {
     if(socket.id == p1)
     {
       console.log("draw request from p1");
-      io.emit('draw', "1");
+      io.emit('initDraw', "1");
     }
     else
     {
@@ -45,8 +45,20 @@ io.on('connection', (socket) => {
       io.emit('draw', "1");
     }
   });
-});
 
+  socket.on('play', (msg) => {
+    if(socket.id == p1) //if it comes from player 1, we need to alert 2
+    {
+      console.log("sending move to player 2");
+      io.emit('play1', msg); //alert the listening client sockets that play1 did something
+    }
+    if(socket.id == p2)
+    {
+      io.emit('play2', msg); //alert the listening client sockets that play2 did something
+    }
+
+  });
+});
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/game.html'); //to specify which html file to connect to
@@ -55,6 +67,7 @@ app.get('/', (req, res) => {
 app.get('/player2', (req, res) => {
   res.sendFile(__dirname + '/player2.html'); //to specify which html file to connect to
 });
+
 server.listen(3000, () => {
     console.log('listening on *:3000');
 });
