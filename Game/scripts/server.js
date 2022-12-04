@@ -11,9 +11,9 @@ var p1 = -1; //player 1
 var p2 = -1; //player 2
 
 //this is the page we serve
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/game.html'); //to specify which html file to connect to
-  });
+
+
+
 
 io.on('connection', (socket) => {
   if(p1 == -1)
@@ -32,6 +32,29 @@ io.on('connection', (socket) => {
   }
 });
 
+io.on('connection', (socket) => {
+  socket.on('draw', (msg) => { //on request to draw, we need to answer with the right hand
+    if(socket.id == p1)
+    {
+      console.log("draw request from p1");
+      io.emit('draw', "1");
+    }
+    else
+    {
+      console.log("draw request from p2");
+      io.emit('draw', "1");
+    }
+  });
+});
+
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/game.html'); //to specify which html file to connect to
+});
+
+app.get('/player2', (req, res) => {
+  res.sendFile(__dirname + '/player2.html'); //to specify which html file to connect to
+});
 server.listen(3000, () => {
     console.log('listening on *:3000');
 });
