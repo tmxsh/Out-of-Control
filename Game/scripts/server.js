@@ -74,6 +74,10 @@ app.get('/player2', (req, res) => {
   res.sendFile(__dirname + '/player2.html'); //to specify which html file to connect to
 });
 
+app.get('/index.html', (req, res) => {
+  res.sendFile(__dirname + '/index.html'); //to specify which html file to connect to
+});
+
 server.listen(3000, () => {
     console.log('listening on *:3000');
 });
