@@ -46,21 +46,27 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('play', (msg) => {
+  socket.on('play', (msg, callback) => {
     if(socket.id == p1) //if it comes from player 1, we need to alert 2
     {
       console.log("sending move to player 2");
       io.emit('play1', msg); //alert the listening client sockets that play1 did something
+      callback({
+        status: "ok"
+      });
     }
     if(socket.id == p2)
     {
       io.emit('play2', msg); //alert the listening client sockets that play2 did something
+      callback({
+        status: "ok"
+      });
     }
 
   });
 });
 
-app.get('/', (req, res) => {
+app.get('/player1', (req, res) => {
     res.sendFile(__dirname + '/game.html'); //to specify which html file to connect to
 });
 
