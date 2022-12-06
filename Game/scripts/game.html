@@ -200,6 +200,8 @@ var ranks = [1, 2, 3,3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10]
 var startLocation = 0;
 
 var dischargeVal = 0;
+var grave = false;
+var exotic = false;
 
 //deck for player one, hand for player 1
 var deck1 = new Array();
@@ -240,12 +242,12 @@ function updateTurn()
         v.innerHTML = "Player 2's Turn";
 
 }
-
+/*
 function ability(name, rank, type, location)
 {
     console.log(name + " " + rank + " " + type + " ability activated");
 }
-/*
+*/
 function ability(name, rank, type, location)
 {
     console.log("Name is " + name);
@@ -253,26 +255,32 @@ function ability(name, rank, type, location)
     {
         draw(deck, hand1, 'deck1', 'hand1');
     }
+    
     if(name == "Reactor")
     {
         alert("Choose a card in play to mimic its ability, or use it for diffusion");
 		    //need board based context action to select for this ability
     }
+    
     if(name == "Exotic Matter")
     {
-        alert("You may play another card worth 3 or less")
+        alert("You may play another card worth 3 or less");
 		    //wormhole slection method unkown?
     }
-    if(name == "Anomaly")
+    
+    if(name == "Anomoly")
     {
-        alert("Select a stable card to destory")
-		    //need context action for the board for Anomaly, Rewind, Reactor, & Dark Energy
+        alert("Select a stable card to destroy");
+		//need context action for the board for Anomaly, Rewind, Reactor, & Dark Energy
     }
+    
     if(name == "Wormhole")
     {
+        grave = true;
         alert("Select a card from the graveyard to return to your hand")
 		    //need a context action for slecting from graveyard
     }
+    /*
     if(name == "Rewind")
     {
         alert("Pick a card to be placed onto the bottom of its deck")
@@ -283,15 +291,21 @@ function ability(name, rank, type, location)
         alert("Pick a stable card on the board to take control of")
 		    //need a way to select a card on the board for this ability
     }
+    */
     if(name == "Singularity")
     {
-        alert("Board Wiped")
-	for(let i = 0, i < board.length ; i++) {
-			if board[i].type == "unstable" {
-				discard(board[i].name, board[i].rank, board[i].type, board[i].location)
-					i--
-				}
-	}
+        alert("Board Wiped");
+        for(let i = 0; i < board.length; i++) {
+            discard(board[i].Name, board[i].Rank, board[i].Type, board[i].Location);
+                //discard(board1[i].Name, board1[i].Rank, board1[i].Type, board1[i].Location);
+		}
+	    
+        for(let i = 0; i < board1.length; i++) //clear board1
+        {
+            discard(board1[i].Name, board1[i].Rank, board1[i].Type, board1[i].Location);
+        }
+    }
+    /*
     }
     if(name == "Antimatter")
     {
@@ -307,8 +321,9 @@ function ability(name, rank, type, location)
         alert("Time stopped?")
 		    //need to discuss what this abilty will actually be
     }
+    */
 }
-*/
+
 function createDeck()
 {
     //Each player gets 26 cards in their deck - two of each card
@@ -547,7 +562,8 @@ function findCard(passedDeck, name, rank, type, newDeck)
 
 function playCard(name, rank, type, location) //you will only play cards from the hand
 {
-    console.log("playing card");
+  
+  
     //findCard(hand1, name, rank, type, board);
     let x = findCardIndex(hand1, name, rank, type);
     hand1[x].Location = 1; //change location to board
@@ -557,7 +573,7 @@ function playCard(name, rank, type, location) //you will only play cards from th
     {
         ability(name, rank, type, location);
     }
-
+    //exotic = false;
     renderAll();
 }
 
@@ -604,7 +620,11 @@ function discard(name, rank, type,location)
         hand1[x].location = 2; //change location to the graveyard
         graveyard[graveyard.length] = hand1[x]; //add card to the graveyard
         hand1.splice(x,1); //remove the card from the hand
-        
+        if(type == "unstable")
+        {
+            ability(name, rank, type, location);
+        }
+
         renderAll();
     }
     if(location == 1) //this card is on the board
@@ -625,6 +645,32 @@ function discharge(name, rank, type, location)
     //call discard to put the card in the
     dischargeVal = rank;
     discard(name, rank, type, location);
+}
+
+function returnGrave(name, rank, type, location)
+{
+    if(grave == true)
+    {
+        let x = findCardIndex(graveyard, name, rank, type);
+        graveyard[x].Location = 1; //change location to board
+        hand1[hand1.length] = graveyard[x];//add the card to the board
+        graveyard.splice(x,1); //remove the card from the hand
+        if(type == "stable") //stable cards call their abilities when they are played
+        {
+            ability(name, rank, type, location);
+        }
+        grave = false;
+        //exotic = false;
+        
+    }
+
+    else
+    {
+        alert("Not allowed at this time");
+    }
+
+    renderAll();
+    
 }
 
 function dischargeBoard(name, rank, type, location)
@@ -683,7 +729,7 @@ function renderHand()
             select.appendChild(option);
             if(k == 0)
                 option.appendChild(document.createTextNode("Play"));
-            if(k == 1)
+            if(k == 1 && hand1[i].Type == "unstable")
                 option.appendChild(document.createTextNode("Discard"));
             if(k == 2)
                 option.appendChild(document.createTextNode("Discharge"));
@@ -841,10 +887,16 @@ function renderGrave()
 		var rank = document.createElement("div");
 		var type = document.createElement("div");
 
+        var select = document.createElement("select");
+        var s = "returnGrave(" + "'" + graveyard[i].Name + "'" + "," + graveyard[i].Rank + "," + "'" + graveyard[i].Type + "'" + "," + graveyard[i].Location + ")";
+
+        select.setAttribute("onchange", s);
 
         card.className = "card";
 		rank.className = "rank";
 		type.className = "type" + graveyard[i].Type;
+
+        
 
         //sets rank based on the rank of the card
 		rank.innerHTML = graveyard[i].Name + " (" + graveyard[i].Rank + ")" + "( " + graveyard[i].Type + ")";
@@ -852,8 +904,20 @@ function renderGrave()
           //appends the rank type and select button to the card element
 		card.appendChild(rank);
 		card.appendChild(type);
+        card.appendChild(select);
         //card.appendChild(select);
         //used to set the id
+
+        var blank = document.createElement("option");
+        blank.setAttribute("value", "Select a move");
+        blank.setAttribute("selected", "selected");
+        select.appendChild(blank);
+
+        var option = document.createElement("option");
+        blank.appendChild(document.createTextNode("Select an option"));
+        option.appendChild(document.createTextNode("Return from Grave"));
+
+        select.appendChild(option);
 
         document.getElementById('graveyard').appendChild(card);
     }
@@ -871,6 +935,7 @@ function renderAll()
 
     updateTurn();
     turn++;
+    console.log(exotic);
 }
 function load()
 {
