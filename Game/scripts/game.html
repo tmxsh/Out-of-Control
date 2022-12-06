@@ -227,6 +227,26 @@ var board1 = new Array();
 
 var graveyard = new Array();
 
+var turn = 0; //mod2 remainder 1 means player 1s turn, remainder 0 means player 2's turn
+//starts at 0 because we call renderall right away
+
+function updateTurn()
+{
+    let v = document.getElementById("turn");
+
+    if(turn%2 == 1)
+    {
+        
+
+        v.innerHTML = "Player 1's Turn";
+
+    }
+
+    else
+        v.innerHTML = "Player 2's Turn";
+
+}
+
 function ability(name, rank, type, location)
 {
     console.log(name + " " + rank + " " + type + " ability activated");
@@ -854,6 +874,9 @@ function renderAll()
 
     getScore();
     getScore2();
+
+    updateTurn();
+    turn++;
 }
 function load()
 {
@@ -884,38 +907,6 @@ var socket = io();
 socket.on('play2', function(msg) {
 
     playEnemy(msg);
-    /**
-    console.log(msg + " played by player 2");
-
-    deck2 = createDeck();
-    
-
-    let indexFirst = msg.indexOf(",");
-    let indexSecond = msg.indexOf(",", indexFirst + 1);
-
-    let name = msg.slice(0, indexFirst);
-
-    let rank = msg.slice(indexFirst + 1, indexSecond);
-
-    let type = msg.slice(indexSecond + 1, msg.length);
-
-    console.log(name);
-
-    console.log(rank);
-
-    console.log(type);
-
-    let x = findCardIndex(deck2, name, rank, type);
-    deck2[x].Location = 3; //change location to enemy board
-    board1[board1.length] = deck2[x];//add the card to the board
-    deck2.splice(x,1); //remove the card from the hand
-    if(type == "stable") //stable cards call their abilities when they are played
-    {
-        ability(name, rank, type, location);
-    }
-
-    renderAll();
-    **/
 });
 
 function playEnemy(msg)
@@ -971,21 +962,7 @@ function playEnemy(msg)
 
         renderAll();
     }
-    /**
-    else
-        deck2 = createDeck();
 
-    let x = findCardIndex(deck2, name, rank, type);
-    deck2[x].Location = 3; //change location to enemy board
-    board1[board1.length] = deck2[x];//add the card to the board
-    deck2.splice(x,1); //remove the card from the hand
-    if(type == "stable") //stable cards call their abilities when they are played
-    {
-        ability(name, rank, type, location);
-    }
-    
-    renderAll();
-    **/
     
 
 }

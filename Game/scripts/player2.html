@@ -171,6 +171,10 @@ div{
         <div class="score">
             <h1> Your Score </h1>
             <p id="score"> 0 </p>
+            <h1> Enemy Score </h1>
+            <p id="escore"> 0 </p>
+            <h1> Turn </h1>
+            <p id="turn"> Player 1's Turn </p>
         </div>
     
         <div class="graveyard">
@@ -223,6 +227,27 @@ var board = new Array();
 var board1 = new Array();
 
 var graveyard = new Array();
+
+var turn = 1; //mod2 remainder 1 means player 1s turn, remainder 0 means player 2's turn
+//starts at 0 because we call renderall right away
+
+function updateTurn()
+{
+    console.log("turn is " + turn);
+    let v = document.getElementById("turn");
+
+    if(turn%2 == 1)
+    {
+        
+
+        v.innerHTML = "Player 1's Turn";
+
+    }
+
+    else
+        v.innerHTML = "Player 2's Turn";
+
+}
 
 
 //THIS IS A PLACEHOLDER FUNCTION
@@ -482,6 +507,26 @@ function getScore()
     }
     //append the score to the HTML
     document.getElementById('score').innerHTML = score.toString();
+}
+
+function getScore2()
+{
+    //initialized score - starts at 0, for obvious reasons
+    var score = 0;
+
+    for(var i = 0; i < board1.length; i++)
+    {
+        //walk through the board(I originally thought it was the hand where the score came from)
+        score = score + board1[i].Rank;
+        //update score
+    }
+    
+    if(score >= 21)
+    {
+        alert("YOU WIN!!");
+    }
+    //append the score to the HTML
+    document.getElementById('escore').innerHTML = score.toString();
 }
 
 function findCardIndex(passedDeck,name, rank, type)
@@ -831,12 +876,17 @@ function renderGrave()
 
 function renderAll()
 {
+    //console.log("turn is !! " + turn);
     renderHand();
     renderBoard();
     renderBoard1();
     renderGrave();
 
     getScore();
+    getScore2();
+
+    updateTurn();
+    turn++;
     
 }
 function load()
@@ -870,38 +920,6 @@ var socket = io();
 socket.on('play1', function(msg) {
 
 playEnemy(msg);
-/**
-console.log(msg + " played by player 2");
-
-deck2 = createDeck();
-
-
-let indexFirst = msg.indexOf(",");
-let indexSecond = msg.indexOf(",", indexFirst + 1);
-
-let name = msg.slice(0, indexFirst);
-
-let rank = msg.slice(indexFirst + 1, indexSecond);
-
-let type = msg.slice(indexSecond + 1, msg.length);
-
-console.log(name);
-
-console.log(rank);
-
-console.log(type);
-
-let x = findCardIndex(deck2, name, rank, type);
-deck2[x].Location = 3; //change location to enemy board
-board1[board1.length] = deck2[x];//add the card to the board
-deck2.splice(x,1); //remove the card from the hand
-if(type == "stable") //stable cards call their abilities when they are played
-{
-    ability(name, rank, type, location);
-}
-
-renderAll();
-**/
 });
 
 function playEnemy(msg)
@@ -957,21 +975,6 @@ function playEnemy(msg)
 
         renderAll();
     }
-    /**
-    else
-        deck2 = createDeck();
-
-    let x = findCardIndex(deck2, name, rank, type);
-    deck2[x].Location = 3; //change location to enemy board
-    board1[board1.length] = deck2[x];//add the card to the board
-    deck2.splice(x,1); //remove the card from the hand
-    if(type == "stable") //stable cards call their abilities when they are played
-    {
-        ability(name, rank, type, location);
-    }
-    
-    renderAll();
-    **/
     
 
 }
