@@ -126,6 +126,7 @@ div{
 
 #board1{
     grid-area:b1;
+    background-color:tomato
 }
 
 #board2{
@@ -199,9 +200,18 @@ var names = ["Rift", "Reactor", "Force Field" , "Exotic Matter", "Deflector", "A
 var ranks = [1, 2, 3,3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10]
 var startLocation = 0;
 
+
+
+//Variables for keeping track of what is and is not allowed at any given time
 var dischargeVal = 0;
 var grave = false;
 var exotic = false;
+var anomoly = false;
+var rewind = false;
+var darkEnergy = false;
+var reactor = false;
+
+
 
 //deck for player one, hand for player 1
 var deck1 = new Array();
@@ -258,18 +268,21 @@ function ability(name, rank, type, location)
     
     if(name == "Reactor")
     {
-        alert("Choose a card in play to mimic its ability, or use it for diffusion");
+        reactor = true;
+        alert("Choose a card in play to mimic its ability");
 		    //need board based context action to select for this ability
     }
     
     if(name == "Exotic Matter")
     {
+        exotic = true;
         alert("You may play another card worth 3 or less");
 		    //wormhole slection method unkown?
     }
     
     if(name == "Anomoly")
     {
+        anomoly = true;
         alert("Select a stable card to destroy");
 		//need context action for the board for Anomaly, Rewind, Reactor, & Dark Energy
     }
@@ -280,18 +293,20 @@ function ability(name, rank, type, location)
         alert("Select a card from the graveyard to return to your hand")
 		    //need a context action for slecting from graveyard
     }
-    /*
+    
     if(name == "Rewind")
     {
+        rewind = true;
         alert("Pick a card to be placed onto the bottom of its deck")
-		    //need a way to select a cardon the board for this ability
+	    //need a way to select a cardon the board for this ability
     }
     if(name == "Dark Energy")
     {
-        alert("Pick a stable card on the board to take control of")
+        darkEnergy = true;
+        alert("Pick a stable card on the board to copy to your board")
 		    //need a way to select a card on the board for this ability
     }
-    */
+    
     if(name == "Singularity")
     {
         alert("Board Wiped");
@@ -562,8 +577,19 @@ function findCard(passedDeck, name, rank, type, newDeck)
 
 function playCard(name, rank, type, location) //you will only play cards from the hand
 {
-  
-  
+    if(exotic == true)
+    {
+        if(rank <= 3)
+        {
+            exotic = false;
+            playCard(name, rank, type, location);
+        }
+        else
+        {
+            alert("Choose a card worth 3 or less");
+            return;
+        }
+    }
     //findCard(hand1, name, rank, type, board);
     let x = findCardIndex(hand1, name, rank, type);
     hand1[x].Location = 1; //change location to board
@@ -585,10 +611,7 @@ function playEnemyCard(name, rank, type, location) //you will only play cards fr
     testDeck[x].Location = 3; //change location to enemy board
     board1[board1.length] = testDeck[x];//add the card to the board
     testDeck.splice(x,1); //remove the card from the hand
-    if(type == "stable") //stable cards call their abilities when they are played
-    {
-        ability(name, rank, type, location);
-    }
+    
 
     renderAll();
 }
@@ -794,6 +817,104 @@ function renderHand2()
 
     }
 }
+
+function mimic(name, rank, type, location)
+{
+    if(reactor == true)
+    {
+        reactor = false;
+        ability(name, rank, type, location);
+    }
+    else
+    {
+        alert("Not allowed at this time");
+        return;
+    }
+}
+
+function destroy(name, rank, type, location)
+{
+    if(anomoly == true)
+    {
+        if(type == "stable")
+        {
+            anomoly = false;
+            discard(name, rank, type, location);
+        }
+        else
+        {
+            alert("Choose a card that is stable to destroy");
+        }
+            
+            
+        
+    }
+    else
+    {
+        alert("Not allowed at this time");
+        return;
+    }
+}
+function boardOptions(value, name, rank, type, location)
+{
+    if(value == 0) //this is for mimic
+    {
+        mimic(name, rank, type, location);
+    }
+    if(value == 1) //this is for discharge
+    {
+        dischargeBoard(name, rank, type, location);
+    }
+    if(value == 2) //this is for destroy
+    {
+        destroy(name, rank, type, location);
+    }
+}
+
+function copy(name, rank, type, location)
+{
+    if(darkEnergy == true)
+    {
+        if(type == "stable")
+        {
+            darkEnergy = false;
+        
+            let tempDeck = createDeck();
+            let x = findCardIndex(tempDeck, name, rank, type);
+            board[board.length] = tempDeck[x];
+
+            renderAll();
+        }
+        else
+        {
+            alert("Choose a stable card to copy");
+            return;
+        }
+        
+    }
+    else
+    {
+        alert("Not allowed at this time");
+        return;
+    }
+}
+function eboardOptions(value, name, rank, type, location)
+{
+    if(value == 0)//this is for copy
+    {
+        copy(name, rank, type, location);
+
+    }
+    if(value == 1) //this is for discharge
+    {
+        dischargeBoard(name, rank, type, location);
+    }
+    if(value == 2) //this is for destroy
+    {
+        destroy(name, rank, type, location);
+    }
+}
+
 function renderBoard()
 {
     //get the board
@@ -805,32 +926,42 @@ function renderBoard()
 		var type = document.createElement("div");
         //create the button to discharge
         var select = document.createElement("select");
-        var s = "dischargeBoard(" + "'" + board[i].Name + "'" + "," + board[i].Rank + "," + "'" + board[i].Type + "'" + "," + board[i].Location + ")";
+        var s = "boardOptions(this.value," + "'" + board[i].Name + "'" + "," + board[i].Rank + "," + "'" + board[i].Type + "'" + ","  + board[i].Location + ")";
 
+        //when the button is changed, call the function specified above
         select.setAttribute("onchange", s);
-
+        //add the select box to the cards
         document.body.appendChild(select);
-
-        card.className = "card";
 
          //sets rank based on the rank of the card
 		rank.innerHTML = board[i].Name + " (" + board[i].Rank + ")" + "( " + board[i].Type + ")";
 
-        card.appendChild(rank);
-        card.appendChild(type);
+        //appends the rank type and select button to the card element
+		card.appendChild(rank);
+		card.appendChild(type);
         card.appendChild(select);
+
+        card.className = "card";
+        //used to set the id
+        var s = rank.toString + type.toString;
 
         var blank = document.createElement("option");
         blank.setAttribute("value", "Select a move");
         blank.setAttribute("selected", "selected");
         select.appendChild(blank);
-
-        var option = document.createElement("option");
-        blank.appendChild(document.createTextNode("Select an option"));
-        option.appendChild(document.createTextNode("Discharge"));
-
-        select.appendChild(option);
-
+        blank.appendChild(document.createTextNode("Select an Option"));
+        for(var k = 0; k < 3; k++)
+        {
+            var option = document.createElement("option");
+            option.setAttribute("value", k);
+            select.appendChild(option);
+            if(k == 0)
+                option.appendChild(document.createTextNode("Mimic"));
+            if(k == 1)
+                option.appendChild(document.createTextNode("Discharge"));
+            if(k == 2)
+                option.appendChild(document.createTextNode("Destroy"));
+        }
         document.getElementById('board2').appendChild(card);
 
     }
@@ -847,31 +978,42 @@ function renderBoard1()
 		var type = document.createElement("div");
         //create the button to discharge
         var select = document.createElement("select");
-        var s = "dischargeBoard(" + "'" + board1[i].Name + "'" + "," + board1[i].Rank + "," + "'" + board1[i].Type + "'" + "," + board1[i].Location + ")";
+        var s = "eboardOptions(this.value," + "'" + board1[i].Name + "'" + "," + board1[i].Rank + "," + "'" + board1[i].Type + "'" + ","  + board1[i].Location + ")";
 
+        //when the button is changed, call the function specified above
         select.setAttribute("onchange", s);
-
+        //add the select box to the cards
         document.body.appendChild(select);
-
-        card.className = "card";
 
          //sets rank based on the rank of the card
 		rank.innerHTML = board1[i].Name + " (" + board1[i].Rank + ")" + "( " + board1[i].Type + ")";
 
-        card.appendChild(rank);
-        card.appendChild(type);
+        //appends the rank type and select button to the card element
+		card.appendChild(rank);
+		card.appendChild(type);
         card.appendChild(select);
+
+        card.className = "card";
+        //used to set the id
+        var s = rank.toString + type.toString;
 
         var blank = document.createElement("option");
         blank.setAttribute("value", "Select a move");
         blank.setAttribute("selected", "selected");
         select.appendChild(blank);
-
-        var option = document.createElement("option");
-        blank.appendChild(document.createTextNode("Select an option"));
-        option.appendChild(document.createTextNode("Discharge"));
-
-        select.appendChild(option);
+        blank.appendChild(document.createTextNode("Select an Option"));
+        for(var k = 0; k < 3; k++)
+        {
+            var option = document.createElement("option");
+            option.setAttribute("value", k);
+            select.appendChild(option);
+            if(k == 0)
+                option.appendChild(document.createTextNode("Copy"));
+            if(k == 1)
+                option.appendChild(document.createTextNode("Discharge"));
+            if(k == 2)
+                option.appendChild(document.createTextNode("Destroy"));
+        }
 
         document.getElementById('board1').appendChild(card);
 
@@ -935,7 +1077,7 @@ function renderAll()
 
     updateTurn();
     turn++;
-    console.log(exotic);
+    //console.log(exotic);
 }
 function load()
 {
