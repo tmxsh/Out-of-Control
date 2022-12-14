@@ -55,7 +55,9 @@ You are now ready to play!
 ![firefox_C8VgczJd8c](https://user-images.githubusercontent.com/49414542/207735356-85973af8-e0e6-4703-b68a-02c80c91fb52.png) All of the cards in the hand were generated and added to the page through Javascript. 
 3. Homepage and SQL Database/Login: Our next feature was a Homepage and a very basic login system using SQL. Our plan was to eventually connect this database to the game so that wins and losses could be tracked and we could create a leaderboard, however at the moment that is a feature that is planned for the future. 
 This is the homepage:
+
 ![firefox_cUF0g12qDq](https://user-images.githubusercontent.com/49414542/207737366-67584b25-4277-43fd-bf91-f6468ea50a3f.png)
+
 The log in page:
 
 ![firefox_i1i0BSnLYv](https://user-images.githubusercontent.com/49414542/207737449-23a92267-a07c-4c39-8771-e72b7b2caf18.png)
@@ -63,5 +65,7 @@ The log in page:
 The create an account page:
 
 ![firefox_rwKE9K1k9e](https://user-images.githubusercontent.com/49414542/207737495-a583f0a0-8a53-4ce7-9662-f71cb7435a27.png)
+
+
 
 
