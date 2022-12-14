@@ -2,7 +2,7 @@
 
 Out-of-Control is a card game inspired by the game Control, made by Keymaster games, meant to be played right in the browser between two people. In the future, we also plan on implementing a leaderboard for all users to track their wins and see who can rack up the most.
 
-# Installation
+## Installation
 
 Requirements:
 Operating System: None
@@ -48,3 +48,9 @@ You are now ready to play!
 # Things to watch out for when playing
 1. The server will print IDs for player 1 and player 2 when they connect. If the server prints out 'too many connections!', that means that too many players have connected to the server. To resolve this, you will need to hit CTRL-C in the terminal to stop the server, and close out all of your browser windows. You can then start the server and play again. 
 2. When a player has reached 21 points, an alert will pop up letting you both know that they have won. At that point, you will want to hit CTRL-C in the terminal where you started the server to stop the server, and close all browser windows. You can play again by going to the terminal where you stopped the server and typing in: node server.js 
+
+# Implemented Features
+1. HTML Web Framework: The very first feature we needed to implement was the web page itself. This was done through HTML and styled with CSS. It has gone through many revisions, but this is the final framework: ![firefox_bm9KGKw5Tx](https://user-images.githubusercontent.com/49414542/207735004-713685e5-c795-4624-ab86-37033fb4d08d.png)
+2. Card Javascript Framework: Our next feature was to implement the cards, so that we could create a deck, shuffle it, and then draw cards. We originally had a shuffle button, but removed it in lieu of a button just to draw cards instead: 
+![firefox_C8VgczJd8c](https://user-images.githubusercontent.com/49414542/207735356-85973af8-e0e6-4703-b68a-02c80c91fb52.png) All of the cards in the hand were generated and added to the page through Javascript. 
+3. Homepage and SQL Database/Login: Our next ef
