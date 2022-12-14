@@ -26,7 +26,7 @@ At this point, Out-Of-Control and all of its preqrequisites are now installed on
 
 Step 1: Navigate to your Out-Of-Control/Game/game_files directory from a terminal or command prompt.
 
-Step 2: type node server.js - this will start the gameserver, and you are now ready to connect.
+Step 2: type node server.js - this will start the gameserver, and you are now ready to connect. You can stop the server at any time by hitting CTRL-C in this same terminal. This will prevent you from playing the game, however!
 
 # If you are going to be playing on your own system
 Step 1: Open a browser and enter localhost:3000/player1 in the URL bar. This will connect player 1.
@@ -44,3 +44,7 @@ Step 2: Open a browser and enter that IP:3000/player1 in the URL bar. This will 
 Step 3: Open a browser and enter that IP:3000/player2 in the URL bar. This will connect player 2.
 
 You are now ready to play!
+
+# Things to watch out for when playing
+1. The server will print IDs for player 1 and player 2 when they connect. If the server prints out 'too many connections!', that means that too many players have connected to the server. To resolve this, you will need to hit CTRL-C in the terminal to stop the server, and close out all of your browser windows. You can then start the server and play again. 
+2. When a player has reached 21 points, an alert will pop up letting you both know that they have won. At that point, you will want to hit CTRL-C in the terminal where you started the server to stop the server, and close all browser windows. You can play again by going to the terminal where you stopped the server and typing in: node server.js 
