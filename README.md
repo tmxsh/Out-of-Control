@@ -35,6 +35,14 @@ Step 2: Open a browser and enter localhost:3000/player2 in the URL bar. This wil
 
 You are now ready to play!
 
+# While playing
+
+- The game will automatically draw your first hand for you.
+- At the beginning of each turn, you may draw a card.
+- After that, you can choose to play, discard, or discharge a card from your hand.
+- Playing a card will put it on the board, play an ability if the card is stable and has one, and add to your point total. Discarding a card will put it in your graveyard and activate its ability if it is unstable and has one. Discharging a card will allow you to remove a card of equal or lower value from your board.
+- The first player to reach a point total of 21 wins!
+
 # If you are going to be playing from another computer and connecting to the server running the game.
 
 Step 1: Optain the IP address of the server running the game.
