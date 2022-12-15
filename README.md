@@ -90,6 +90,6 @@ Our first ever version of this networking backend was a simple chat app to allow
 
 ![firefox_uQnc4aJwYD](https://user-images.githubusercontent.com/49414542/207752255-c3b9cd3e-96ee-48e7-a413-0735e4a61504.png)
 
-7: Card Abilities: The latest feature we have implemented is card abilities! Card abilities trigger on play for stable cards, and on discard for unstable cards. While not ever card has an ability, those that do create a variety of options for the person activating them. Our demo video, linked here, shows the card abilities in action: 
+7: Card Abilities: The latest feature we have implemented is card abilities! Card abilities trigger on play for stable cards, and on discard for unstable cards. While not every card has an ability, those that do create a variety of options for the person activating them. Our demo video, linked here, shows the card abilities in action: https://youtu.be/lEcpK3gLBqk
 
 
