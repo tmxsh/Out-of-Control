@@ -897,7 +897,9 @@ function copy(name, rank, type, location)
             let tempDeck = createDeck();
             let x = findCardIndex(tempDeck, name, rank, type);
             board[board.length] = tempDeck[x];
-
+            socket.volatile.emit("play", name + "," + rank + "," + type, (response) =>{
+            console.log("response is " + response.status);
+        });
             renderAll();
         }
         else

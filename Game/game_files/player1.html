@@ -184,7 +184,7 @@ div{
     
         <div class="hand">
             <h1>Your Hand</h1>
-            <a class="draw" href="javascript:void(0)" class="btn" onclick="draw(deck, hand1, 'deck1', 'hand1')">Draw</a>
+            <a class="draw" href="javascript:void(0)" class="btn" onclick="draw(deck, hand1)">Draw</a>
             <div id="hand1">Your Hand</div>
         </div>
     </div>
@@ -193,9 +193,8 @@ div{
 
 <script>
 
-//var testDeck = createDeck();
 
-    //These are the two types of cards
+//These are the two types of cards
 var types = ["stable", "unstable"];
 //Names of the cards - shows on the front 
 var names = ["Rift", "Reactor", "Force Field" , "Exotic Matter", "Deflector", "Anomoly", 
@@ -204,7 +203,7 @@ var names = ["Rift", "Reactor", "Force Field" , "Exotic Matter", "Deflector", "A
 
 //different ranks for the cards - goes 1 through 10
 var ranks = [1, 2, 3,3, 4, 4, 5, 5, 6, 6, 7, 8, 9, 10]
-var startLocation = 0;
+
 
 
 
@@ -234,19 +233,18 @@ var board = new Array();
 //this is for the other player
 var board1 = new Array();
 
-
-
-
+//This is the graveyard
 var graveyard = new Array();
 
 var turn = 0; //mod2 remainder 1 means player 1s turn, remainder 0 means player 2's turn
 //starts at 0 because we call renderall right away
 
+//this function updates the turn displayed on the screen for the user - it does so 
 function updateTurn()
 {
-    let v = document.getElementById("turn");
+    let v = document.getElementById("turn"); //gets our page
 
-    if(turn%2 == 1)
+    if(turn%2 == 1) //if it's not divisible by 2, it's player 1s turn
     {
         
 
@@ -254,133 +252,109 @@ function updateTurn()
 
     }
 
-    else
+    else //otherwise, it is player two's turn
         v.innerHTML = "Player 2's Turn";
 
 }
-/*
+
+//this is to activate card abilities. This is called when stable cards are played to the board, or when unstable cards are discarded.
 function ability(name, rank, type, location)
 {
-    console.log(name + " " + rank + " " + type + " ability activated");
-}
-*/
-function ability(name, rank, type, location)
-{
-    console.log("Name is " + name);
-    if(name == "Rift")
+    if(name == "Rift") //rift
     {
-        draw(deck, hand1, 'deck1', 'hand1');
+        //rift just draws a card to the hand
+        draw(deck, hand1);
     }
     
-    if(name == "Reactor")
+    if(name == "Reactor") //reactor
     {
-        reactor = true;
-        alert("Choose a card in play to mimic its ability");
-		    //need board based context action to select for this ability
+        reactor = true; //set reactor to true, so we know that we are allowed to mimic. This is checked in the mimic function. 
+        alert("Choose a card in play to mimic its ability"); //alert the user that they are allowed to mimic.
+
     }
     
-    if(name == "Exotic Matter")
+    if(name == "Exotic Matter") //exotic matter
     {
-        exotic = true;
-        alert("You may play another card worth 3 or less");
-		    //wormhole slection method unkown?
+        exotic = true; //set exotic to true, which is checked when a card is played after exotics ability activates.
+        alert("You may play another card worth 3 or less"); //alert the player
+		
     }
     
-    if(name == "Anomoly")
+    if(name == "Anomoly") //anomoly
     {
-        anomoly = true;
-        alert("Select a stable card to destroy");
-		//need context action for the board for Anomaly, Rewind, Reactor, & Dark Energy
+        anomoly = true; //set anomoly to true, which is checked when a card is chosen to be destroyed after wormhole's ability activates.
+        alert("Select a stable card to destroy"); //alert the player
     }
     
-    if(name == "Wormhole")
+    if(name == "Wormhole") //wormhole
     {
-        grave = true;
-        alert("Select a card from the graveyard to return to your hand")
-		    //need a context action for slecting from graveyard
+        grave = true; //set grave to true, so we can recover a card from the graveyard
+        alert("Select a card from the graveyard to return to your hand") //alert the player
     }
     
-    if(name == "Rewind")
+    if(name == "Rewind") //rewind
     {
-        rewind = true;
-        alert("Pick a card to be placed onto the bottom of its deck")
-	    //need a way to select a cardon the board for this ability
+        rewind = true; //sets rewind to true, which is checked in the rewind function to see if we can choose a card to move 
+        alert("Pick a card to be placed onto the bottom of its deck") //alert the player
     }
-    if(name == "Dark Energy")
+    if(name == "Dark Energy") //dark energy
     {
-        darkEnergy = true;
-        alert("Pick a stable card on the board to copy to your board")
-		    //need a way to select a card on the board for this ability
+        darkEnergy = true; //sets dark energy to true, which is checked in the copy function
+        alert("Pick a stable card on the board to copy to your board") //alert the player
     }
     
-    if(name == "Singularity")
+    if(name == "Singularity") //singularity
     {
-        alert("Board Wiped");
-        for(let i = 0; i < board.length; i++) {
+        alert("Board Wiped"); //alert the player that the board is being wiped
+        for(let i = 0; i < board.length; i++) { //iterate through the first board and discard everything
             discard(board[i].Name, board[i].Rank, board[i].Type, board[i].Location);
-                //discard(board1[i].Name, board1[i].Rank, board1[i].Type, board1[i].Location);
 		}
 	    
-        for(let i = 0; i < board1.length; i++) //clear board1
+        for(let i = 0; i < board1.length; i++) //iterate through the second board and discard everything
         {
             discard(board1[i].Name, board1[i].Rank, board1[i].Type, board1[i].Location);
         }
     }
-    /*
-    }
-    if(name == "Antimatter")
-    {
-        alert("discard two cards at random")
-		    //Math.floor(Math.random() * put enemy player hand size here)
-		    //discard
-		    //Math.floor(Math.random() * put enemy player new hand size here)
-		    //discard
-		    //need to know which player activated this ability
-    }
-    if(name == "Time Stop")
-    {
-        alert("Time stopped?")
-		    //need to discuss what this abilty will actually be
-    }
-    */
 }
 
-function createDeck()
+function createDeck() //this is the function we use to build our decks
 {
     //Each player gets 26 cards in their deck - two of each card
     let deck = new Array();
     //create the stable cards
     for(let i = 0; i < 2; i++)
     {
-        for(let j = 0; j < types.length;j++)
+        for(let j = 0; j < types.length;j++) //second loop to get through them all - our total is going to be 26
 
         {
             if(j == 0) //stable loop
             {
                 for(let k = 0; k < 4; k++) //first four ranks are stable
                 {
-                    let card = {Type: types[j], Name: names[k], Rank: ranks[k], Location: 0};
-                    deck.push(card);
+                    let card = {Type: types[j], Name: names[k], Rank: ranks[k], Location: 0}; //create our card objects 
+                    deck.push(card); //push the card on top of the deck
                 }
                 
             }
-            else //unstable loop
+            else //unstable loop for the rest
             {
                 for(let k = 4; k < names.length; k++)
                 {
-                    let card = {Type: types[j], Name: names[k], Rank: ranks[k], Location: 0};
-                    deck.push(card);
+                    let card = {Type: types[j], Name: names[k], Rank: ranks[k], Location: 0}; //create our card objects 
+                    deck.push(card);//push the card on top of the deck
                 }
             }
         }
     }
 
-    return deck;
+    return deck; //returns deck. In our initialization, this is what our deck objects are set to. 
 }
 
-function shuffle(passedDeck, deckId)
+//This function is to shuffle the deck after it is created, to make sure that we aren't always drawing the same card. It takes in a deck object, created through 
+//createDeck()
+function shuffle(passedDeck)
 {
-    for(let i = 0; i < 1000; i++)
+    for(let i = 0; i < 1000; i++)//give it a 1000 tries
     {
         //generate some seeds to randomize
         let location1 = Math.floor(Math.random() * passedDeck.length);
@@ -389,151 +363,58 @@ function shuffle(passedDeck, deckId)
         //just a temp deck to swap the position
         let temp = passedDeck[location1];
 
-        passedDeck[location1] = passedDeck[location2]
-        passedDeck[location2] = temp;
+        passedDeck[location1] = passedDeck[location2] //swap positions
+        passedDeck[location2] = temp; //insert the temp card to the random spot in our deck
     }
 }
-
+//this function is called when the buttons are clicked on the cards in a users hand. Its parameters in the fields for the cards, value, name, rank, type, and location. 
 function selectOption(value, name, rank, type,location)
 {
     if(value == "0") //the player selected play
     {
-        playCard(name, rank, type);
-        socket.volatile.emit("play", name + "," + rank + "," + type, (response) =>{
+        playCard(name, rank, type); //call the playCard function (this will activate its abilit)
+        socket.volatile.emit("play", name + "," + rank + "," + type, (response) =>{ //this is to send the message to the server that we have chosen to play a card
             console.log("response is " + response.status);
         });
     }
     if(value == "1") //player selected discard
     {
-        discard(name, rank, type, location);
+        discard(name, rank, type, location); //call the discard function
     }
-    if(value == "2") //player selected discharge
+    if(value == "2") //player selected discharge 
     {
-        discharge(name, rank, type, location);
+        discharge(name, rank, type, location); //called the discharge function
     }
 }
-function render(passedDeck, deckId)
+//this is our function to draw a card. It takes as parameters an array for the deck, an array for the hand
+function draw(passedDeck, passedHand)
 {
-    //console.log(document.getElementById(deckId));
-    document.getElementById(deckId).innerHTML = '';
-	for(var i = 0; i < passedDeck.length; i++)
-	{
-        //console.log(passedDeck.keys({passedDeck})[0]);
-        //creates HTML elements for the card, its rank, and its type
-		var card = document.createElement("div");
-		var rank = document.createElement("div");
-		var type = document.createElement("div");
-
-        //creates the select option on the cards 
-        var select = document.createElement("select");
-        var s = "selectOption(this.value," + "'" + passedDeck[i].Name + "'" + "," + passedDeck[i].Rank + "," + "'" + passedDeck[i].Type + "'" + ","  + passedDeck[i].Location + ")";
-
-        //console.log(passedDeck[i].Location)
-        //console.log(s);
-        select.setAttribute("onchange", s);
-        //creates a body for us to put the options for the select button
-        document.body.appendChild(select);
-
-        //sets the classname for the formerly created HTML divs
-		card.className = "card";
-		rank.className = "rank";
-		type.className = "type" + passedDeck[i].Type;
-
-
-        //sets rank based on the rank of the card
-		rank.innerHTML = passedDeck[i].Name + " (" + passedDeck[i].Rank + ")" + "( " + passedDeck[i].Type + ")";
-
-        //appends the rank type and select button to the card element
-		card.appendChild(rank);
-		card.appendChild(type);
-        card.appendChild(select);
-        //used to set the id
-        var s = rank.toString + type.toString;
-
-        //set the id of the card
-        card.setAttribute("id", s);
-
-        //make it dragable and set the event - this may be removed from production
-        card.setAttribute("draggable", "true");
-        card.setAttribute("ondragstart", "drag(event)");
-
-
-        //set attribute names for the html so they can be retrieved
-        card.setAttribute("data-name", passedDeck[i].Name);
-        card.setAttribute("data-rank", passedDeck[i].Rank);
-        card.setAttribute("data-type", passedDeck[i].Type);
-
-        //create option to play
-
-        var blank = document.createElement("option");
-        blank.setAttribute("value", "Select a move");
-        blank.setAttribute("selected", "selected");
-
-        var option1 = document.createElement("option");
-        option1.setAttribute("value", "0");
+    passedHand[passedHand.length] = passedDeck.pop(); //pop a card off of the passedDeck, and add it to the passedHand at the end of the array.
     
-        //option to discard
-        var option2 = document.createElement("option");
-        option2.setAttribute("value", "1");
-
-
-        //option to discharge
-        var option3 = document.createElement("option");
-        option3.setAttribute("value", "2");
-
-        var textNode = document.createTextNode("Select an Option");
-        blank.appendChild(textNode);
-        //setting the text on the select box
-        textNode = document.createTextNode("Play");
-        option1.appendChild(textNode);
-
-        //setting the text on the select box
-        textNode = document.createTextNode("Discard");
-        option2.appendChild(textNode);
-
-        //setting the text on the select box
-        textNode = document.createTextNode("Discharge");
-        option3.appendChild(textNode);
-
-        //appending the different options to our select box so one can be chosen
-        select.appendChild(blank);
-        select.appendChild(option1);
-        select.appendChild(option2);
-        select.appendChild(option3);
-
-        //appends the created card to the correct deckID
-        document.getElementById(deckId).appendChild(card);
-        getScore(board, "score");
-	}
+    renderAll(); //we call renderAll to update our board
 }
 
-function draw(passedDeck, passedHand, deckName, handName)
-{
-    passedHand[passedHand.length] = passedDeck.pop();
-    
-    renderAll();
-}
-
+//the getscore function is meant to calculate the score of the cards on the board for the user
 function getScore()
 {
     //initialized score - starts at 0, for obvious reasons
-    var score = 0;
+    var score = 0; 
 
     for(var i = 0; i < board.length; i++)
     {
         //walk through the board(I originally thought it was the hand where the score came from)
-        score = score + board[i].Rank;
+        score = score + board[i].Rank; //the score is cumulative, so add the score up based on the ranks of the cards on the board
         //update score
     }
     
-    if(score >= 21)
+    if(score >= 21) //you play to 21 to win 
     {
-        alert("YOU WIN!!");
+        alert("YOU WIN!!"); //let the player know that they won with an alert
     }
     //append the score to the HTML
-    document.getElementById('score').innerHTML = score.toString();
+    document.getElementById('score').innerHTML = score.toString(); //score is an int, so we have to convert it to a string to append it properly
 }
-
+//getscore2() is meant to calculate the score for the enemy's board
 function getScore2()
 {
     //initialized score - starts at 0, for obvious reasons
@@ -542,74 +423,82 @@ function getScore2()
     for(var i = 0; i < board1.length; i++)
     {
         //walk through the board(I originally thought it was the hand where the score came from)
-        score = score + board1[i].Rank;
+        score = score + board1[i].Rank; //the score is cumulative, so add the score up based on the ranks of the cards on the board
         //update score
     }
     
-    if(score >= 21)
+    if(score >= 21) //the game is played to 21
     {
-        alert("YOU WIN!!");
+        alert("YOU LOSE!!"); //if the other player gets to 21, you lose!
     }
     //append the score to the HTML
-    document.getElementById('escore').innerHTML = score.toString();
+    document.getElementById('escore').innerHTML = score.toString(); //score is an int, so we have to convert it to a string to append it properly
 }
 
+//findCardIndex returns the first known index a card occurs in a deck. Its parameters are an array for passedDeck,
+//then the name, rank, and type of the card being search for.
+//we need the index specifically for functions like playCard()
 function findCardIndex(passedDeck,name, rank, type)
 {
-    for(var i = 0; i < passedDeck.length; i++)
+    for(var i = 0; i < passedDeck.length; i++) //iterate through the deck that was passed in
     {
+        //if we find a card that matches what we're looking for, return the index.
+        //Otherwise the loop will just go again until we've reached the end of the deck
         if(passedDeck[i].Rank == rank && passedDeck[i].Name == name && passedDeck[i].Type == type)
         {
             return i;
         }
     }
 }
+
+//findCard finds a card if it's in the first deck passed in
+//using the name, rank, and type parameters,
+//and will place that card in the second deck passed in
 function findCard(passedDeck, name, rank, type, newDeck)
 {
-    for(var i = 0; i < passedDeck.length; i++)
+    for(var i = 0; i < passedDeck.length; i++) //iterate through the first deck given
     {
+        //if we find a card that matches the rank, name, and type passed to the function
         if(passedDeck[i].Rank == rank && passedDeck[i].Name == name && passedDeck[i].Type == type)
         {
-            newDeck[newDeck.length] = passedDeck[i];
-            passedDeck.splice(i, 1);
-            return;
-        }
-        else
-        {
-            console.log("failed to find card");
+            newDeck[newDeck.length] = passedDeck[i]; //add that card to the end of the newdeck
+            passedDeck.splice(i, 1); //remove that card from the old deck
+            return; //return from the function
         }
     }
 }
 
+//playCard is used to play cards from the hand, and activate their abilities
+//if the card is stable
 function playCard(name, rank, type, location) //you will only play cards from the hand
 {
-    if(exotic == true)
+    if(exotic == true) //check our exotic variable
     {
-        if(rank <= 3)
+        if(rank <= 3) //exotic allows you to play a card of equal or lesser value,
+        {             //so the card being played must be worth 3 or less
+            exotic = false; //reset the exotic variable
+            playCard(name, rank, type, location); //play the card with the variable reset.
+        }                                        
+        else //if they choose a card with a value that is too high 
         {
-            exotic = false;
-            playCard(name, rank, type, location);
-        }
-        else
-        {
-            alert("Choose a card worth 3 or less");
-            return;
+            alert("Choose a card worth 3 or less"); //alert the player
+            return; //exit the function
         }
     }
-    //findCard(hand1, name, rank, type, board);
-    let x = findCardIndex(hand1, name, rank, type);
+
+    let x = findCardIndex(hand1, name, rank, type); //get the index
     hand1[x].Location = 1; //change location to board
     board[board.length] = hand1[x];//add the card to the board
     hand1.splice(x,1); //remove the card from the hand
     if(type == "stable") //stable cards call their abilities when they are played
     {
-        ability(name, rank, type, location);
+        ability(name, rank, type, location); //call the ability function for the card
     }
-    //exotic = false;
-    renderAll();
+    renderAll(); //we have moved a card, so render the board again
 }
 
-function playEnemyCard(name, rank, type, location) //you will only play cards from the hand
+
+function playEnemyCard(name, rank, type, location)
 {
     //deck = createDeck();
     console.log("playing card");
@@ -622,108 +511,102 @@ function playEnemyCard(name, rank, type, location) //you will only play cards fr
     renderAll();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//discard is used to send cards to the graveyard. To discard a card,
+//we will need to know it's name, rank, type, and location.
 function discard(name, rank, type,location)
 {
-    console.log("discarding card");
     if(location == 0) //this card is in the hand
     {
-        let x = findCardIndex(hand1, name, rank, type);
+        let x = findCardIndex(hand1, name, rank, type); //get the index
         hand1[x].location = 2; //change location to the graveyard
         graveyard[graveyard.length] = hand1[x]; //add card to the graveyard
         hand1.splice(x,1); //remove the card from the hand
-        if(type == "unstable")
+        if(type == "unstable") //unstable cards activate their abilities when discarded
         {
-            ability(name, rank, type, location);
+            ability(name, rank, type, location); //call the ability function
         }
 
-        renderAll();
+        renderAll(); //we moved a card, so re-render the board.
     }
     if(location == 1) //this card is on the board
     {
-        let x = findCardIndex(board, name, rank, type);
+        let x = findCardIndex(board, name, rank, type); //get the index
         board[x].location = 2; //change location to the graveyard
         graveyard[graveyard.length] = board[x]; //add the card to the graveyard
         board.splice(x,1); //remove the card from the board
-        renderAll();
+        renderAll(); //we moved a card, so re-render the board.
     }
 
 }
 
+//the discharge function gets called when users choose the discharge option on cards.
+//the parameters are the name, rank, type, and location of the card you are discharging
 function discharge(name, rank, type, location)
 {
     //alert to tell the player what to do
     alert("Choose a card of lower or equal value on the board to discard");
-    //call discard to put the card in the
-    dischargeVal = rank;
-    discard(name, rank, type, location);
+    dischargeVal = rank; //set dischargeVal, which is used to make sure players don't
+                         //then remove a card with a value that is too high
+    discard(name, rank, type, location); //call discard to move the card to the graveyard
 }
 
+//returnGrave is used to return a card from the grave to the hand.
+//its parameters are the name, rank, type, and location of the card
+//being returned
 function returnGrave(name, rank, type, location)
 {
-    if(grave == true)
-    {
-        let x = findCardIndex(graveyard, name, rank, type);
-        graveyard[x].Location = 1; //change location to board
-        hand1[hand1.length] = graveyard[x];//add the card to the board
-        graveyard.splice(x,1); //remove the card from the hand
+    if(grave == true) //we check this to make sure that the correct card has been played
+    {                 //to allow the returning of a card to the hand
+
+        let x = findCardIndex(graveyard, name, rank, type); //get our index
+        graveyard[x].Location = 0; //change location to hand
+        hand1[hand1.length] = graveyard[x];//add the card to the hand
+        graveyard.splice(x,1); //remove the card from the graveyard
         if(type == "stable") //stable cards call their abilities when they are played
         {
             ability(name, rank, type, location);
         }
-        grave = false;
-        //exotic = false;
-        
+        grave = false; //reset the grave variable so players can't return other cards
     }
 
     else
     {
-        alert("Not allowed at this time");
+        alert("Not allowed at this time"); //let the player know they can't return
+                                           //cards from the grave at this time
     }
 
-    renderAll();
+    renderAll(); //we moved a card, so we re-render the board
     
 }
 
+//dischargeBoard is for discharging a card from the board.
+//its parameters are the name, rank, type, and location
+//of the card you are attempting to discharge
 function dischargeBoard(name, rank, type, location)
 {
+    //we can only discharge cards after a card from the hand has been discharged
+    //and the card we remove from the board must be of lower value
     if(rank <= dischargeVal)
-    {
-        discard(name, rank, type, location);
-        dischargeVal = 0;
+    {                       
+        discard(name, rank, type, location); //discard the card
+        dischargeVal = 0; //reset the discharge value
     }
     else
     {
-        alert("Choose a different card to discharge - this card is worth too much");
+        alert("Choose a different card to discharge - this card is worth too much"); //let the player know they need to choose something else
     }
 }
 
+//renderHand renders the users hand
 function renderHand()
 {
-    document.getElementById('hand1').innerHTML = ''; //set the innerHTML to nothing
+    document.getElementById('hand1').innerHTML = ''; //set the innerHTML for the tag with the id 'hand1' to nothing
     
-    for(var i = 0; i < hand1.length; i++)
+    for(var i = 0; i < hand1.length; i++) //iterate through the hand1 array
     {
-        var card = document.createElement("div");
-        var rank = document.createElement("div");
-        var type = document.createElement("div");
+        var card = document.createElement("div"); //create a div for the card
+        var rank = document.createElement("div"); //create a div for the rank
+        var type = document.createElement("div"); //create a div for the type
 
         var select = document.createElement("select"); //create our drop down
         //this is the function call
@@ -746,39 +629,40 @@ function renderHand()
         //used to set the id
         var s = rank.toString + type.toString;
 
-        var blank = document.createElement("option");
-        blank.setAttribute("value", "Select a move");
-        blank.setAttribute("selected", "selected");
-        select.appendChild(blank);
-        blank.appendChild(document.createTextNode("Select an Option"));
-        for(var k = 0; k < 3; k++)
+        var blank = document.createElement("option"); //create the option element
+        blank.setAttribute("value", "Select a move"); //set the value attribute
+        blank.setAttribute("selected", "selected"); //set the selected attribute 
+        select.appendChild(blank); //append our newly created option to the select element
+        blank.appendChild(document.createTextNode("Select an Option")); //add the text to that option 
+        for(var k = 0; k < 3; k++) //we are going to create three more buttons
         {
-            var option = document.createElement("option");
-            option.setAttribute("value", k);
-            select.appendChild(option);
-            if(k == 0)
-                option.appendChild(document.createTextNode("Play"));
-            if(k == 1 && hand1[i].Type == "unstable")
-                option.appendChild(document.createTextNode("Discard"));
-            if(k == 2)
-                option.appendChild(document.createTextNode("Discharge"));
+            var option = document.createElement("option"); //create another option element
+            option.setAttribute("value", k); //set its value to the loop we are on
+            select.appendChild(option); //append the option to the select element
+            if(k == 0) //first loop
+                option.appendChild(document.createTextNode("Play")); //create and append the play text
+            if(k == 1) //second loop
+                option.appendChild(document.createTextNode("Discard")); //create and append the discard text
+            if(k == 2) //third loop
+                option.appendChild(document.createTextNode("Discharge")); //create and append the discharge text
         }
 
-        document.getElementById('hand1').appendChild(card);
+        document.getElementById('hand1').appendChild(card); //append the card to the hand element
 
     }
 }
 
 
+//renderHand2 renders the enemies hand
 function renderHand2()
 {
-    document.getElementById('hand2').innerHTML = ''; //set the innerHTML to nothing
+    document.getElementById('hand2').innerHTML = ''; //set the innerHTML for the tag with the id 'hand1' to nothing
     
-    for(var i = 0; i < hand2.length; i++)
+    for(var i = 0; i < hand2.length; i++) //iterate through the hand2 array
     {
-        var card = document.createElement("div");
-        var rank = document.createElement("div");
-        var type = document.createElement("div");
+        var card = document.createElement("div"); //create a div for the card
+        var rank = document.createElement("div"); //create a div for the rank
+        var type = document.createElement("div"); //create a div for the type
 
         var select = document.createElement("select"); //create our drop down
         //this is the function call
@@ -801,137 +685,165 @@ function renderHand2()
         //used to set the id
         var s = rank.toString + type.toString;
 
-        var blank = document.createElement("option");
-        blank.setAttribute("value", "Select a move");
-        blank.setAttribute("selected", "selected");
-        select.appendChild(blank);
-        blank.appendChild(document.createTextNode("Select an Option"));
-        for(var k = 0; k < 3; k++)
+        var blank = document.createElement("option"); //create the option element
+        blank.setAttribute("value", "Select a move"); //set the value attribute
+        blank.setAttribute("selected", "selected"); //set the selected attribute 
+        select.appendChild(blank); //append our newly created option to the select element
+        blank.appendChild(document.createTextNode("Select an Option")); //add the text to that option 
+        for(var k = 0; k < 3; k++) //we are going to create three more buttons
         {
-            var option = document.createElement("option");
-            option.setAttribute("value", k);
-            select.appendChild(option);
-            if(k == 0)
-                option.appendChild(document.createTextNode("Play"));
-            if(k == 1)
-                option.appendChild(document.createTextNode("Discard"));
-            if(k == 2)
-                option.appendChild(document.createTextNode("Discharge"));
+            var option = document.createElement("option"); //create another option element
+            option.setAttribute("value", k); //set its value to the loop we are on
+            select.appendChild(option); //append the option to the select element
+            if(k == 0) //first loop
+                option.appendChild(document.createTextNode("Play")); //create and append the play text
+            if(k == 1) //second loop
+                option.appendChild(document.createTextNode("Discard")); //create and append the discard text
+            if(k == 2) //third loop
+                option.appendChild(document.createTextNode("Discharge")); //create and append the discharge text
         }
 
-        document.getElementById('hand2').appendChild(card);
+        document.getElementById('hand2').appendChild(card); //append the card to the hand element
 
     }
 }
 
+//mimic is called when a card ability is being mimiced
+//it taks as parameters the name, rank, type, and location
+//of the card being mimiced
 function mimic(name, rank, type, location)
 {
-    if(reactor == true)
+    if(reactor == true) //mimic can only be called if reactor is played
     {
-        reactor = false;
-        ability(name, rank, type, location);
+        reactor = false; //reset the reactor condition
+        ability(name, rank, type, location); //call the ability
     }
     else
     {
-        alert("Not allowed at this time");
-        return;
+        alert("Not allowed at this time"); //tell the player they're not allowed to do that
+        return; //exit the function
     }
 }
 
+//destroy is called when the destroy option is chosen on the board
+//its parameters are the name, rank, type, and location of the card being chosen
 function destroy(name, rank, type, location)
 {
-    if(anomoly == true)
+    if(anomoly == true) //anomoly must have been called to destroy a card
     {
-        if(type == "stable")
+        if(type == "stable") //we can only destroy stable cards
         {
-            anomoly = false;
-            discard(name, rank, type, location);
+            anomoly = false; //reset the anomoly condition
+            discard(name, rank, type, location); //discard the card
         }
         else
         {
-            alert("Choose a card that is stable to destroy");
+            //tell the player to pick a stable card
+            alert("Choose a card that is stable to destroy"); 
         }
             
             
         
     }
-    else
+    else //the anomoly conidtion is not met
     {
-        alert("Not allowed at this time");
-        return;
+        alert("Not allowed at this time"); //alert the player
+        return; //exit the  function
     }
 }
+
+//boardOptions is called from the board when players
+//select the buttons from cards on the board
+//it takes as parameters the value, name, rank, type,
+//and location of the  card chosen
 function boardOptions(value, name, rank, type, location)
 {
     if(value == 0) //this is for mimic
     {
-        mimic(name, rank, type, location);
+        mimic(name, rank, type, location); //mimic the card
     }
     if(value == 1) //this is for discharge
     {
-        dischargeBoard(name, rank, type, location);
+        dischargeBoard(name, rank, type, location); //discharge the card
     }
     if(value == 2) //this is for destroy
     {
-        destroy(name, rank, type, location);
+        destroy(name, rank, type, location); //destroy the card
     }
 }
 
+//copy is called to copy the ability of a card
+//it takes as parameters the name, rank, type, 
+//and location of the card chosen to copy
 function copy(name, rank, type, location)
 {
+    //we can only copy cards when dark energy is played
     if(darkEnergy == true)
     {
+        //we can only copy stable cards
         if(type == "stable")
         {
-            darkEnergy = false;
+            darkEnergy = false; //reset the dark energy conditional
         
-            let tempDeck = createDeck();
-            let x = findCardIndex(tempDeck, name, rank, type);
-            board[board.length] = tempDeck[x];
+            let tempDeck = createDeck();//create a temporary deck
+            let x = findCardIndex(tempDeck, name, rank, type); //find the card in the temp deck
+            board[board.length] = tempDeck[x]; //put that card on the players board 
+            socket.volatile.emit("play", name + "," + rank + "," + type, (response) =>{
+            console.log("response is " + response.status); //let the server know we 'played' a card because we copied it
+        });
 
-            renderAll();
+            renderAll(); //render everything again since we moved a card
         }
         else
         {
-            alert("Choose a stable card to copy");
-            return;
+            alert("Choose a stable card to copy"); //alert the player they need a stable card
+            return; //exit the function 
         }
         
     }
     else
     {
-        alert("Not allowed at this time");
-        return;
+        alert("Not allowed at this time"); //alert the player they can't copy right now
+        return; //exit the function
     }
 }
+//eboard options is called when the buttons on the cards
+//on the enemy board are clicked
+//it takes as parameters the value, name, rank, type,
+//and location of the chosen card
 function eboardOptions(value, name, rank, type, location)
 {
     if(value == 0)//this is for copy
     {
-        copy(name, rank, type, location);
+        copy(name, rank, type, location); //call the copy function
 
     }
     if(value == 1) //this is for discharge
     {
-        dischargeBoard(name, rank, type, location);
+        dischargeBoard(name, rank, type, location); //call the discharge function
     }
     if(value == 2) //this is for destroy
     {
-        destroy(name, rank, type, location);
+        destroy(name, rank, type, location); //call the destroy function
     }
 }
 
+
+//renderBoard renders the board for the user
+//it uses the board variable to build their board
 function renderBoard()
 {
-    //get the board
-    document.getElementById('board2').innerHTML = '';
-    for(var i = 0; i < board.length; i++)
+    
+    document.getElementById('board2').innerHTML = ''; //get the element that we will be changing
+    for(var i = 0; i < board.length; i++) //iterate through the board
     {
-        var card = document.createElement("div");
-        var rank = document.createElement("div");
-		var type = document.createElement("div");
+        var card = document.createElement("div"); //create a div for the card
+        var rank = document.createElement("div"); //create a div for the document
+		var type = document.createElement("div"); //create a div for the type
         //create the button to discharge
-        var select = document.createElement("select");
+        var select = document.createElement("select"); //create a select element
+
+        //create a string that will work for our function call
         var s = "boardOptions(this.value," + "'" + board[i].Name + "'" + "," + board[i].Rank + "," + "'" + board[i].Type + "'" + ","  + board[i].Location + ")";
 
         //when the button is changed, call the function specified above
@@ -951,40 +863,44 @@ function renderBoard()
         //used to set the id
         var s = rank.toString + type.toString;
 
-        var blank = document.createElement("option");
-        blank.setAttribute("value", "Select a move");
-        blank.setAttribute("selected", "selected");
-        select.appendChild(blank);
-        blank.appendChild(document.createTextNode("Select an Option"));
-        for(var k = 0; k < 3; k++)
+        var blank = document.createElement("option"); //create an option element
+        blank.setAttribute("value", "Select a move"); //set the value attribute on that element 
+        blank.setAttribute("selected", "selected"); //set the selected attribute on that element
+        select.appendChild(blank); //append the option element to the select element we made earlier
+        blank.appendChild(document.createTextNode("Select an Option")); //append the text to select an option
+        for(var k = 0; k < 3; k++) //we are creating three more options 
         {
-            var option = document.createElement("option");
-            option.setAttribute("value", k);
-            select.appendChild(option);
-            if(k == 0)
-                option.appendChild(document.createTextNode("Mimic"));
-            if(k == 1)
-                option.appendChild(document.createTextNode("Discharge"));
-            if(k == 2)
-                option.appendChild(document.createTextNode("Destroy"));
+            var option = document.createElement("option"); //create an option element 
+            option.setAttribute("value", k); //set the value based on the loop
+            select.appendChild(option); //append the new option to the select element
+            if(k == 0) //we are in loop 1
+                option.appendChild(document.createTextNode("Mimic")); //add mimic text to the option element
+            if(k == 1) //we are in loop 2
+                option.appendChild(document.createTextNode("Discharge")); //add discharge text to the option element
+            if(k == 2) //we are in loop 3
+                option.appendChild(document.createTextNode("Destroy")); //add the destroy text to the option element
         }
-        document.getElementById('board2').appendChild(card);
+        document.getElementById('board2').appendChild(card); //append our card to the 'board2' element
 
     }
 }
 
+//renderBoard renders the board for the enemy
+//it uses the board1 variable to build their board
 function renderBoard1()
 {
-    //get the board
-    document.getElementById('board1').innerHTML = '';
-    for(var i = 0; i < board1.length; i++)
+    
+    document.getElementById('board1').innerHTML = ''; //get the element that we will be changing
+    for(var i = 0; i < board1.length; i++) //iterate through the board1
     {
-        var card = document.createElement("div");
-        var rank = document.createElement("div");
-		var type = document.createElement("div");
+        var card = document.createElement("div"); //create a div for the card
+        var rank = document.createElement("div"); //create a div for the document
+		var type = document.createElement("div"); //create a div for the type
         //create the button to discharge
-        var select = document.createElement("select");
-        var s = "eboardOptions(this.value," + "'" + board1[i].Name + "'" + "," + board1[i].Rank + "," + "'" + board1[i].Type + "'" + ","  + board1[i].Location + ")";
+        var select = document.createElement("select"); //create a select element
+
+        //create a string that will work for our function call
+        var s = "boardOptions(this.value," + "'" + board1[i].Name + "'" + "," + board1[i].Rank + "," + "'" + board1[i].Type + "'" + ","  + board1[i].Location + ")";
 
         //when the button is changed, call the function specified above
         select.setAttribute("onchange", s);
@@ -1003,46 +919,50 @@ function renderBoard1()
         //used to set the id
         var s = rank.toString + type.toString;
 
-        var blank = document.createElement("option");
-        blank.setAttribute("value", "Select a move");
-        blank.setAttribute("selected", "selected");
-        select.appendChild(blank);
-        blank.appendChild(document.createTextNode("Select an Option"));
-        for(var k = 0; k < 3; k++)
+        var blank = document.createElement("option"); //create an option element
+        blank.setAttribute("value", "Select a move"); //set the value attribute on that element 
+        blank.setAttribute("selected", "selected"); //set the selected attribute on that element
+        select.appendChild(blank); //append the option element to the select element we made earlier
+        blank.appendChild(document.createTextNode("Select an Option")); //append the text to select an option
+        for(var k = 0; k < 3; k++) //we are creating three more options 
         {
-            var option = document.createElement("option");
-            option.setAttribute("value", k);
-            select.appendChild(option);
-            if(k == 0)
-                option.appendChild(document.createTextNode("Copy"));
-            if(k == 1)
-                option.appendChild(document.createTextNode("Discharge"));
-            if(k == 2)
-                option.appendChild(document.createTextNode("Destroy"));
+            var option = document.createElement("option"); //create an option element 
+            option.setAttribute("value", k); //set the value based on the loop
+            select.appendChild(option); //append the new option to the select element
+            if(k == 0) //we are in loop 1
+                option.appendChild(document.createTextNode("Mimic")); //add mimic text to the option element
+            if(k == 1) //we are in loop 2
+                option.appendChild(document.createTextNode("Discharge")); //add discharge text to the option element
+            if(k == 2) //we are in loop 3
+                option.appendChild(document.createTextNode("Destroy")); //add the destroy text to the option element
         }
-
-        document.getElementById('board1').appendChild(card);
+        document.getElementById('board1').appendChild(card); //append our card to the 'board1' element
 
     }
 }
 
+//renders the grave for the user
 function renderGrave()
 {
-    document.getElementById('graveyard').innerHTML = '';
-    for(var i = 0; i < graveyard.length; i++)
+    document.getElementById('graveyard').innerHTML = ''; //get our html element
+    for(var i = 0; i < graveyard.length; i++) //iterate through the graveyard array 
     {
-        var card = document.createElement("div");
-		var rank = document.createElement("div");
-		var type = document.createElement("div");
+        var card = document.createElement("div"); //create a card div
+		var rank = document.createElement("div"); //create a rank div
+		var type = document.createElement("div"); //create a type div 
 
-        var select = document.createElement("select");
+
+        var select = document.createElement("select"); //create a select element 
+
+        //create a string to use for our function call
         var s = "returnGrave(" + "'" + graveyard[i].Name + "'" + "," + graveyard[i].Rank + "," + "'" + graveyard[i].Type + "'" + "," + graveyard[i].Location + ")";
 
-        select.setAttribute("onchange", s);
+        
+        select.setAttribute("onchange", s); //set the onchange attribute for our select element
 
-        card.className = "card";
-		rank.className = "rank";
-		type.className = "type" + graveyard[i].Type;
+        card.className = "card"; //set the card class name
+		rank.className = "rank"; //set the rank class name
+		type.className = "type" + graveyard[i].Type; //set the type class name
 
         
 
@@ -1056,21 +976,22 @@ function renderGrave()
         //card.appendChild(select);
         //used to set the id
 
-        var blank = document.createElement("option");
-        blank.setAttribute("value", "Select a move");
-        blank.setAttribute("selected", "selected");
-        select.appendChild(blank);
+        var blank = document.createElement("option"); //create the option element 
+        blank.setAttribute("value", "Select a move"); //set the value attribute
+        blank.setAttribute("selected", "selected"); //set the selected attribute
+        select.appendChild(blank); //append the option element to the select element 
 
-        var option = document.createElement("option");
-        blank.appendChild(document.createTextNode("Select an option"));
-        option.appendChild(document.createTextNode("Return from Grave"));
+        var option = document.createElement("option"); //create another option element
+        blank.appendChild(document.createTextNode("Select an option")); //append the select an option textnode
+        option.appendChild(document.createTextNode("Return from Grave")); //append the return from the grave text node
 
-        select.appendChild(option);
+        select.appendChild(option); //append our option element to the select element
 
-        document.getElementById('graveyard').appendChild(card);
+        document.getElementById('graveyard').appendChild(card); //append the card to the element with the id graveyard in the html
     }
 }
 
+//renderAll is meant to be a catchall function to call the other various render  functions
 function renderAll()
 {
     renderHand();
@@ -1082,9 +1003,10 @@ function renderAll()
     getScore2();
 
     updateTurn();
-    turn++;
-    //console.log(exotic);
+    turn++;//we increment the turn when we render the page
+
 }
+//load is called when the window is loaded, it's basically the init function
 function load()
 {
     //deck for user 1
@@ -1092,82 +1014,73 @@ function load()
     //deck for user 2
     deck2 = createDeck();
     //shuffle deck1
-    shuffle(deck, 'deck1');
+    shuffle(deck);
 
     for(var i = 0; i < 7; i++)
     {
-        draw(deck, hand1, 'deck1', 'hand1');
-
-        //draw(deck2, hand2, 'deck2', 'hand2');
+        draw(deck, hand1); //draw the cards to the hand
     }
     
-    //setTimeout(renderHand(), 1000);
-    renderAll();
+    renderAll(); //render everything
 }
 //executes load function when the browser window loads 
 window.onload = load;
 
-const testDeck = createDeck();
 
-var socket = io();
+/// Below this line is the code used for communicating with the server
 
-socket.on('play2', function(msg) {
+const testDeck = createDeck(); //used to make sure we always have a deck to draw cards from 
+
+var socket = io(); //creates the socket that we will use to communicate with the server 
+
+//when our socket object receives a message(msg) from the server with the lable 'play2',
+//we want to play a card for the enemy, based on the information in the msg,
+//which will be the rank, type, etc of the card they played
+socket.on('play2', function(msg) { 
 
     playEnemy(msg);
 });
 
+//playEnemy plays the enemy card to the correct board
 function playEnemy(msg)
 {
-    console.log(msg + " played by player 2");
 
-    let deck2 = createDeck();
-    console.log("deck 2 lenght is " + deck2.length);
+    let deck2 = createDeck(); //create a deck - this makes sure we can make whatever card we need
 
-    let indexFirst = msg.indexOf(",");
-    let indexSecond = msg.indexOf(",", indexFirst + 1);
 
-    let name = msg.slice(0, indexFirst);
+    //the msg sent by the server is the name, rank, and type, seperated by commas
+    let indexFirst = msg.indexOf(","); //find the first comma
 
-    let rank = msg.slice(indexFirst + 1, indexSecond);
+    let indexSecond = msg.indexOf(",", indexFirst + 1); //find the second comma
 
-    let type = msg.slice(indexSecond + 1, msg.length);
+    let name = msg.slice(0, indexFirst); //get the name of the card 
 
-    console.log(name);
+    let rank = msg.slice(indexFirst + 1, indexSecond); //get the rank of the card
 
-    console.log(rank);
+    let type = msg.slice(indexSecond + 1, msg.length); //get the type of the card 
 
-    console.log(type);
-
+    //because of the nature of sockets, we have to check to make sure that deck2
+    //is not undefined so we don't draw a card from it when it  doesn't exist
     if(deck2 != undefined)
     {
-        //let x = findCardIndex(deck2, name, rank, type);
-        let x = -1;
-        for(var i = 0; i < deck2.length; i++)
+        let x = -1; //used to find our card
+        for(var i = 0; i < deck2.length; i++) //iterate through our deck2 object 
         {
-            console.log("name is " + name);
-            console.log("deck[i].Name is " + deck2[i].Name);
-
-            console.log(deck2[i].Name == name);
-
-            if(deck2[i].Name == name)
+            if(deck2[i].Name == name) //if we find the right card
             {
-                x = i;
-                break;
+                x = i; //set x to i
+                break; //exit our loop
             }
             else
-                x = 100000000;
+                x = 100000000; //set x to a number it can never be so we know we failed
             
         }
-        console.log("x is " + x);
-        deck2[x].Location = 3; //change location to enemy board
+    
+        deck2[x].Location = 3; //change location to enemy board 
         board1[board1.length] = deck2[x];//add the card to the board
         deck2.splice(x,1); //remove the card from the hand
-        if(type == "stable") //stable cards call their abilities when they are played
-        {
-            //ability(name, rank, type, location);
-        }
-
-        renderAll();
+    
+        renderAll(); //call render all to update the board
     }
 
     
