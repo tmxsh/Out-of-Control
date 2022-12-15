@@ -61,7 +61,7 @@ You are now ready to play!
 1. HTML Web Framework: The very first feature we needed to implement was the web page itself. This was done through HTML and styled with CSS. It has gone through many revisions, but this is the final framework: ![firefox_bm9KGKw5Tx](https://user-images.githubusercontent.com/49414542/207735004-713685e5-c795-4624-ab86-37033fb4d08d.png)
 2. Card Javascript Framework: Our next feature was to implement the cards, so that we could create a deck, shuffle it, and then draw cards. We originally had a shuffle button, but removed it in lieu of a button just to draw cards instead: 
 ![firefox_C8VgczJd8c](https://user-images.githubusercontent.com/49414542/207735356-85973af8-e0e6-4703-b68a-02c80c91fb52.png) All of the cards in the hand were generated and added to the page through Javascript. 
-3. Homepage and SQL Database/Login: Our next feature was a Homepage and a very basic login system using SQL. Our plan was to eventually connect this database to the game so that wins and losses could be tracked and we could create a leaderboard, however at the moment that is a feature that is planned for the future. 
+3. Homepage and SQL Database/Log-in: Our next feature was a Homepage and a very basic login system using SQL. Our plan was to eventually connect this database to the game so that wins and losses could be tracked and we could create a leaderboard, however at the moment that is a feature that is planned for the future. 
 This is the homepage:
 
 ![firefox_cUF0g12qDq](https://user-images.githubusercontent.com/49414542/207737366-67584b25-4277-43fd-bf91-f6468ea50a3f.png)
@@ -84,7 +84,7 @@ The play option was chosen on the Deflector card, while the Rift and Rewind card
 
 ![image](https://user-images.githubusercontent.com/49414542/207752008-395f95a1-3075-40d4-8a2b-4ca304832e57.png)
 
-Our first ever version of this networking backend was a simple chat app to allow messages to be traded back and forth between two browser instances.
+Our first-ever version of this networking backend was a simple chat app to allow messages to be traded back and forth between two browser instances.
 
 6: 1 vs 1 Gameplay with the card game: With networking implemented, we could move onto allowing players to actually play the game against one another. As you can see in this example, after the networking was implemented, players were able to play cards and have them replicated across both boards, with scores and turns updating as well.  
 
