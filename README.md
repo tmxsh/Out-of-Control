@@ -66,6 +66,22 @@ The create an account page:
 
 ![firefox_rwKE9K1k9e](https://user-images.githubusercontent.com/49414542/207737495-a583f0a0-8a53-4ce7-9662-f71cb7435a27.png)
 
+4: Options on cards to play, discard, and discharge from your hand: Our next feature was to implement the ability to play, discard, and discharge cards that are in your hand and have them go to the appropriate places on the board. For example: 
 
+![firefox_AGkn4UAO4R](https://user-images.githubusercontent.com/49414542/207751564-1b17927e-5e65-47f6-a30c-610d644960ab.png)
+
+The play option was chosen on the Deflector card, while the Rift and Rewind cards were discarded to the graveyard.
+
+5: Networking Backend: Once we had a somewhat playable version of the game, our next feature was to implement a networking backend that would actually allow us to have the two instances of the game for player 1 and player 2 to communicate. 
+
+![image](https://user-images.githubusercontent.com/49414542/207752008-395f95a1-3075-40d4-8a2b-4ca304832e57.png)
+
+Our first ever version of this networking backend was a simple chat app to allow messages to be traded back and forth between two browser instances.
+
+6: 1 vs 1 Gameplay with the card game: With networking implemented, we could move onto allowing players to actually play the game against one another. As you can see in this example, after the networking was implemented, players were able to play cards and have them replicated across both boards, with scores and turns updating as well.  
+
+![firefox_uQnc4aJwYD](https://user-images.githubusercontent.com/49414542/207752255-c3b9cd3e-96ee-48e7-a413-0735e4a61504.png)
+
+7: Card Abilities: The latest feature we have implemented is card abilities! Card abilities trigger on play for stable cards, and on discard for unstable cards. While not ever card has an ability, those that do create a variety of options for the person activating them. Our demo video, linked here, shows the card abilities in action: 
 
 
